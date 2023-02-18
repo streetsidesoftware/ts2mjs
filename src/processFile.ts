@@ -2,23 +2,33 @@ import { dirname, join as pathJoin } from 'path';
 // import MagicString from 'magic-string';
 // import mergeMap from 'merge-source-map';
 
-import { doesContain, isRelativePath } from './fileUtils.js';
+import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import assert from 'assert';
-import { SourceFile } from './SourceFile';
+import { SourceFile, SourceMap } from './SourceFile';
+import { readSourceFile } from './readSourceFile.js';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
 const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
 
-export interface ProcessResult {
+export interface ProcessFileResult {
     filename: string;
+    oldFilename: string;
     content: string;
     linesChanged?: number;
-    mappings?: string;
 }
 
-export function processFile(src: SourceFile, srcRoot: string, _targetRoot: string): ProcessResult {
-    const { srcFilename, content } = src;
+interface AdjustedSourceMap extends SourceMap {
+    oldUrl: URL;
+}
+
+export interface ProcessSourceFileResult extends ProcessFileResult {
+    mappings: AdjustedSourceMap | undefined;
+}
+
+export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: string): ProcessSourceFileResult {
+    const { srcFilename, content, mappings } = src;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
     assert(isSupportedFile.test(srcFilename), 'Must be a supported file type.');
@@ -51,17 +61,54 @@ export function processFile(src: SourceFile, srcRoot: string, _targetRoot: strin
         segments.push(line);
     }
 
-    const filename = srcFilename.replace(/\.js$/, '.mjs').replace(/\.ts$/, '.mts');
+    const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
 
-    if (!linesChanged) return { filename, content };
+    const sourceMap = remapSourceMap(mappings, filename);
+
+    if (!linesChanged) return { filename, oldFilename: srcFilename, content, mappings: sourceMap };
 
     if (lastIndex < content.length) {
         segments.push(content.slice(lastIndex));
     }
 
-    return { filename, content: segments.join(''), linesChanged };
+    return { filename, oldFilename: srcFilename, content: segments.join(''), linesChanged, mappings: sourceMap };
 }
 
 export function isSupportedFileType(filename: string): boolean {
     return isSupportedFile.test(filename);
+}
+
+export async function processFile(filename: string, root: string, target: string): Promise<ProcessFileResult[]> {
+    const src = await readSourceFile(filename);
+    const r = processSourceFile(src, root, target);
+    if (!r.mappings) return [r];
+
+    return [r, processSourceMap(r.mappings)];
+}
+
+function calcNewFilename(srcFilename: string, root: string, target: string): string {
+    const newName = srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1');
+    return rebaseFile(newName, root, target);
+}
+
+export const __testing__ = {
+    calcNewFilename,
+};
+
+function processSourceMap(sourceMap: AdjustedSourceMap): ProcessFileResult {
+    const pr: ProcessFileResult = {
+        filename: fileURLToPath(sourceMap.url),
+        oldFilename: fileURLToPath(sourceMap.oldUrl),
+        content: sourceMap.mappings,
+        linesChanged: 1,
+    };
+
+    return pr;
+}
+
+function remapSourceMap(sourceMap: SourceMap | undefined, toSourceFilename: string): AdjustedSourceMap | undefined {
+    if (!sourceMap) return undefined;
+
+    const url = pathToFileURL(toSourceFilename + '.map');
+    return { url, oldUrl: sourceMap.url, mappings: sourceMap.mappings };
 }

@@ -16,62 +16,102 @@ exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
 "done.
 fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
 fixtures/sample/lib/database/fetch.d.ts.map - copy
+fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Updated
 fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Updated
 fixtures/sample/lib/database/fetch.js.map - copy
+fixtures/sample/lib/database/fetch.js.map -> temp/database/fetch.mjs.map Updated
 fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Updated
 fixtures/sample/lib/database/index.d.ts.map - copy
+fixtures/sample/lib/database/index.d.ts.map -> temp/database/index.d.mts.map Updated
 fixtures/sample/lib/database/index.js -> temp/database/index.mjs Updated
 fixtures/sample/lib/database/index.js.map - copy
+fixtures/sample/lib/database/index.js.map -> temp/database/index.mjs.map Updated
 fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
 fixtures/sample/lib/index.d.ts.map - copy
+fixtures/sample/lib/index.d.ts.map -> temp/index.d.mts.map Updated
 fixtures/sample/lib/index.js -> temp/index.mjs Updated
 fixtures/sample/lib/index.js.map - copy
+fixtures/sample/lib/index.js.map -> temp/index.mjs.map Updated
 fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Updated
 fixtures/sample/lib/lookup.d.ts.map - copy
+fixtures/sample/lib/lookup.d.ts.map -> temp/lookup.d.mts.map Updated
 fixtures/sample/lib/lookup.js -> temp/lookup.mjs Updated
 fixtures/sample/lib/lookup.js.map - copy
+fixtures/sample/lib/lookup.js.map -> temp/lookup.mjs.map Updated
 fixtures/sample/lib/types.d.ts -> temp/types.d.mts Updated
 fixtures/sample/lib/types.d.ts.map - copy
+fixtures/sample/lib/types.d.ts.map -> temp/types.d.mts.map Updated
 fixtures/sample/lib/types.js -> temp/types.mjs Updated
-fixtures/sample/lib/types.js.map - copy"
+fixtures/sample/lib/types.js.map - copy
+fixtures/sample/lib/types.js.map -> temp/types.mjs.map Updated"
 `;
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 "done.
 fixtures/sample/lib/database/fetch.d.ts - renamed
+fixtures/sample/lib/database/fetch.d.ts - renamed
 fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.d.ts.map -> fixtures/sample/lib/database/fetch.d.mts.map Updated
+fixtures/sample/lib/database/fetch.js - renamed
 fixtures/sample/lib/database/fetch.js - renamed
 fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Updated
+fixtures/sample/lib/database/fetch.js.map -> fixtures/sample/lib/database/fetch.mjs.map Updated
+fixtures/sample/lib/database/index.d.ts - renamed
 fixtures/sample/lib/database/index.d.ts - renamed
 fixtures/sample/lib/database/index.d.ts -> fixtures/sample/lib/database/index.d.mts Updated
+fixtures/sample/lib/database/index.d.ts.map -> fixtures/sample/lib/database/index.d.mts.map Updated
+fixtures/sample/lib/database/index.js - renamed
 fixtures/sample/lib/database/index.js - renamed
 fixtures/sample/lib/database/index.js -> fixtures/sample/lib/database/index.mjs Updated
+fixtures/sample/lib/database/index.js.map -> fixtures/sample/lib/database/index.mjs.map Updated
+fixtures/sample/lib/index.d.ts - renamed
 fixtures/sample/lib/index.d.ts - renamed
 fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
+fixtures/sample/lib/index.d.ts.map -> fixtures/sample/lib/index.d.mts.map Updated
+fixtures/sample/lib/index.js - renamed
 fixtures/sample/lib/index.js - renamed
 fixtures/sample/lib/index.js -> fixtures/sample/lib/index.mjs Updated
+fixtures/sample/lib/index.js.map -> fixtures/sample/lib/index.mjs.map Updated
+fixtures/sample/lib/lookup.d.ts - renamed
 fixtures/sample/lib/lookup.d.ts - renamed
 fixtures/sample/lib/lookup.d.ts -> fixtures/sample/lib/lookup.d.mts Updated
+fixtures/sample/lib/lookup.d.ts.map -> fixtures/sample/lib/lookup.d.mts.map Updated
+fixtures/sample/lib/lookup.js - renamed
 fixtures/sample/lib/lookup.js - renamed
 fixtures/sample/lib/lookup.js -> fixtures/sample/lib/lookup.mjs Updated
+fixtures/sample/lib/lookup.js.map -> fixtures/sample/lib/lookup.mjs.map Updated
+fixtures/sample/lib/types.d.ts - renamed
 fixtures/sample/lib/types.d.ts - renamed
 fixtures/sample/lib/types.d.ts -> fixtures/sample/lib/types.d.mts Updated
+fixtures/sample/lib/types.d.ts.map -> fixtures/sample/lib/types.d.mts.map Updated
 fixtures/sample/lib/types.js - renamed
-fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
+fixtures/sample/lib/types.js - renamed
+fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated
+fixtures/sample/lib/types.js.map -> fixtures/sample/lib/types.mjs.map Updated"
 `;
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib', '--keep' ] 1`] = `
 "done.
 fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.d.ts.map -> fixtures/sample/lib/database/fetch.d.mts.map Updated
 fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Updated
+fixtures/sample/lib/database/fetch.js.map -> fixtures/sample/lib/database/fetch.mjs.map Updated
 fixtures/sample/lib/database/index.d.ts -> fixtures/sample/lib/database/index.d.mts Updated
+fixtures/sample/lib/database/index.d.ts.map -> fixtures/sample/lib/database/index.d.mts.map Updated
 fixtures/sample/lib/database/index.js -> fixtures/sample/lib/database/index.mjs Updated
+fixtures/sample/lib/database/index.js.map -> fixtures/sample/lib/database/index.mjs.map Updated
 fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
+fixtures/sample/lib/index.d.ts.map -> fixtures/sample/lib/index.d.mts.map Updated
 fixtures/sample/lib/index.js -> fixtures/sample/lib/index.mjs Updated
+fixtures/sample/lib/index.js.map -> fixtures/sample/lib/index.mjs.map Updated
 fixtures/sample/lib/lookup.d.ts -> fixtures/sample/lib/lookup.d.mts Updated
+fixtures/sample/lib/lookup.d.ts.map -> fixtures/sample/lib/lookup.d.mts.map Updated
 fixtures/sample/lib/lookup.js -> fixtures/sample/lib/lookup.mjs Updated
+fixtures/sample/lib/lookup.js.map -> fixtures/sample/lib/lookup.mjs.map Updated
 fixtures/sample/lib/types.d.ts -> fixtures/sample/lib/types.d.mts Updated
-fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
+fixtures/sample/lib/types.d.ts.map -> fixtures/sample/lib/types.d.mts.map Updated
+fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated
+fixtures/sample/lib/types.js.map -> fixtures/sample/lib/types.mjs.map Updated"
 `;
 
 exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `"done."`;
@@ -80,22 +120,32 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample/lib' ] 1`] = `
 "done.
 fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
 fixtures/sample/lib/database/fetch.d.ts.map - copy
+fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Updated
 fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Updated
 fixtures/sample/lib/database/fetch.js.map - copy
+fixtures/sample/lib/database/fetch.js.map -> temp/database/fetch.mjs.map Updated
 fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Updated
 fixtures/sample/lib/database/index.d.ts.map - copy
+fixtures/sample/lib/database/index.d.ts.map -> temp/database/index.d.mts.map Updated
 fixtures/sample/lib/database/index.js -> temp/database/index.mjs Updated
 fixtures/sample/lib/database/index.js.map - copy
+fixtures/sample/lib/database/index.js.map -> temp/database/index.mjs.map Updated
 fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
 fixtures/sample/lib/index.d.ts.map - copy
+fixtures/sample/lib/index.d.ts.map -> temp/index.d.mts.map Updated
 fixtures/sample/lib/index.js -> temp/index.mjs Updated
 fixtures/sample/lib/index.js.map - copy
+fixtures/sample/lib/index.js.map -> temp/index.mjs.map Updated
 fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Updated
 fixtures/sample/lib/lookup.d.ts.map - copy
+fixtures/sample/lib/lookup.d.ts.map -> temp/lookup.d.mts.map Updated
 fixtures/sample/lib/lookup.js -> temp/lookup.mjs Updated
 fixtures/sample/lib/lookup.js.map - copy
+fixtures/sample/lib/lookup.js.map -> temp/lookup.mjs.map Updated
 fixtures/sample/lib/types.d.ts -> temp/types.d.mts Updated
 fixtures/sample/lib/types.d.ts.map - copy
+fixtures/sample/lib/types.d.ts.map -> temp/types.d.mts.map Updated
 fixtures/sample/lib/types.js -> temp/types.mjs Updated
-fixtures/sample/lib/types.js.map - copy"
+fixtures/sample/lib/types.js.map - copy
+fixtures/sample/lib/types.js.map -> temp/types.mjs.map Updated"
 `;

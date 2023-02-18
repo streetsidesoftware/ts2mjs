@@ -1,5 +1,10 @@
 export interface SourceFile {
     srcFilename: string;
     content: string;
-    mappings?: string | undefined;
+    mappings?: SourceMap | undefined;
+}
+
+export interface SourceMap {
+    url: URL;
+    mappings: string;
 }
