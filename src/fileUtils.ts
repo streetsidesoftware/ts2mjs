@@ -40,3 +40,11 @@ export async function copyFile(fromFile: string, toFile: string): Promise<void> 
     const buff = await fs.readFile(fromFile);
     await fs.writeFile(toFile, buff);
 }
+
+export async function mkdir(dir: string): Promise<void> {
+    await fs.mkdir(dir, { recursive: true });
+}
+
+export async function readFile(filename: string): Promise<string> {
+    return fs.readFile(filename, 'utf8');
+}

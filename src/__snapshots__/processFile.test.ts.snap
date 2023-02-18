@@ -1,12 +1,14 @@
 // Vitest Snapshot v1
 
-exports[`processFile > processFile 1`] = `
-"export { lookUpPerson } from './lookup.mjs';
-//# sourceMappingURL=index.js.map"
-`;
-
-exports[`processFile > processFile 2`] = `
+exports[`processFile > processFile 'sample/lib/index.d.ts' 1`] = `
 "export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.mjs';
 export { lookUpPerson } from './lookup.mjs';
-//# sourceMappingURL=index.d.ts.map"
+export { fetchEntity } from './database/index.mjs';
+"
+`;
+
+exports[`processFile > processFile 'sample/lib/index.js' 1`] = `
+"export { lookUpPerson } from './lookup.mjs';
+export { fetchEntity } from './database/index.mjs';
+"
 `;

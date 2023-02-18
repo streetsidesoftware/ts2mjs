@@ -14,6 +14,14 @@ done."
 
 exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
 "done.
+fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.d.ts.map - copy
+fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Updated
+fixtures/sample/lib/database/fetch.js.map - copy
+fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Updated
+fixtures/sample/lib/database/index.d.ts.map - copy
+fixtures/sample/lib/database/index.js -> temp/database/index.mjs Updated
+fixtures/sample/lib/database/index.js.map - copy
 fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
 fixtures/sample/lib/index.d.ts.map - copy
 fixtures/sample/lib/index.js -> temp/index.mjs Updated
@@ -30,6 +38,14 @@ fixtures/sample/lib/types.js.map - copy"
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 "done.
+fixtures/sample/lib/database/fetch.d.ts - renamed
+fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.js - renamed
+fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Updated
+fixtures/sample/lib/database/index.d.ts - renamed
+fixtures/sample/lib/database/index.d.ts -> fixtures/sample/lib/database/index.d.mts Updated
+fixtures/sample/lib/database/index.js - renamed
+fixtures/sample/lib/database/index.js -> fixtures/sample/lib/database/index.mjs Updated
 fixtures/sample/lib/index.d.ts - renamed
 fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
 fixtures/sample/lib/index.js - renamed
@@ -46,6 +62,10 @@ fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib', '--keep' ] 1`] = `
 "done.
+fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Updated
+fixtures/sample/lib/database/index.d.ts -> fixtures/sample/lib/database/index.d.mts Updated
+fixtures/sample/lib/database/index.js -> fixtures/sample/lib/database/index.mjs Updated
 fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
 fixtures/sample/lib/index.js -> fixtures/sample/lib/index.mjs Updated
 fixtures/sample/lib/lookup.d.ts -> fixtures/sample/lib/lookup.d.mts Updated
@@ -56,8 +76,16 @@ fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
 
 exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `"done."`;
 
-exports[`app > run (actual) [ '.', …(2) ] 1`] = `
+exports[`app > run (actual) [ '.', '--root=fixtures/sample/lib' ] 1`] = `
 "done.
+fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
+fixtures/sample/lib/database/fetch.d.ts.map - copy
+fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Updated
+fixtures/sample/lib/database/fetch.js.map - copy
+fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Updated
+fixtures/sample/lib/database/index.d.ts.map - copy
+fixtures/sample/lib/database/index.js -> temp/database/index.mjs Updated
+fixtures/sample/lib/database/index.js.map - copy
 fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
 fixtures/sample/lib/index.d.ts.map - copy
 fixtures/sample/lib/index.js -> temp/index.mjs Updated

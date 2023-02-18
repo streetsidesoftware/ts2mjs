@@ -1,10 +1,10 @@
-import assert from 'assert';
 import chalk from 'chalk';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-import { doesContain, rebaseFile, copyFile as cpFile } from './fileUtils.js';
+import { copyFile as cpFile, doesContain, mkdir, rebaseFile } from './fileUtils.js';
 import { isSupportedFileType, processFile } from './processFile.js';
+import { readSourceFile } from './readSourceFile.js';
 
 export interface Options {
     keep: boolean | undefined;
@@ -36,7 +36,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     }
 
     async function mkFileDir(filename: string) {
-        !dryRun && (await fs.mkdir(path.dirname(filename), { recursive: true }));
+        !dryRun && (await mkdir(path.dirname(filename)));
     }
 
     async function cp(src: string, dst: string) {
@@ -71,9 +71,8 @@ export async function processFiles(files: string[], options: Options): Promise<P
 
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
-        const content = await fs.readFile(src, 'utf8');
-        const result = processFile(src, content, fromDir);
-        assert(!result.skipped, 'File should have been already filtered out.');
+        const srcFile = await readSourceFile(src);
+        const result = processFile(srcFile, fromDir, toDir);
         const dst = rebaseFile(result.filename, fromDir, toDir);
         logProgress(`${relName(src)} -> ${relName(dst)} ${chalk.green('Updated')}`);
         await mkFileDir(dst);

@@ -1,6 +1,10 @@
 import { dirname, join as pathJoin } from 'path';
+// import MagicString from 'magic-string';
+// import mergeMap from 'merge-source-map';
 
 import { doesContain, isRelativePath } from './fileUtils.js';
+import assert from 'assert';
+import { SourceFile } from './SourceFile';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
@@ -9,13 +13,15 @@ const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
 export interface ProcessResult {
     filename: string;
     content: string;
-    skipped?: boolean;
     linesChanged?: number;
+    mappings?: string;
 }
 
-export function processFile(srcFilename: string, content: string, root: string): ProcessResult {
-    if (!doesContain(root, srcFilename) || !isSupportedFile.test(srcFilename))
-        return { filename: srcFilename, content, skipped: true };
+export function processFile(src: SourceFile, srcRoot: string, _targetRoot: string): ProcessResult {
+    const { srcFilename, content } = src;
+
+    assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
+    assert(isSupportedFile.test(srcFilename), 'Must be a supported file type.');
 
     const exp = new RegExp(regExpImportExport);
 
@@ -35,7 +41,7 @@ export function processFile(srcFilename: string, content: string, root: string):
         const line = match[0];
         const reference = match.groups?.['file'];
 
-        if (reference && isRelativePath(reference) && doesContain(root, pathJoin(currentDir, reference))) {
+        if (reference && isRelativePath(reference) && doesContain(srcRoot, pathJoin(currentDir, reference))) {
             const newLine = line.replace(/\.js';/, ".mjs';");
             segments.push(newLine);
             linesChanged += linesChanged + (newLine === line ? 0 : 1);
