@@ -2,10 +2,10 @@ import { basename, dirname, join as pathJoin, normalize, relative, sep as pathSe
 
 import assert from 'assert';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { createMagicString, MagicString } from '../lib/magicString.mjs';
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import { SourceFile, SourceMap } from './SourceFile.js';
-import { createMagicString, SourceMap as MsSourceMap, MagicString } from '../lib/magicString.mjs';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
@@ -116,12 +116,7 @@ function remapSourceMap(
     if (!sourceMap) return undefined;
 
     const url = pathToFileURL(toSourceFilename + '.map');
-
-    const oldMap = new MsSourceMap(JSON.parse(sourceMap.map));
     const map = magicString.generateMap({ file: toSourceFilename, source: fromSourceFilename });
-
-    console.error('%o', [oldMap, map]);
-
     return { url, oldUrl: sourceMap.url, map: map.toString() };
 }
 
