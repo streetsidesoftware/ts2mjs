@@ -12,3 +12,5 @@ export {
 } from './types.js';
 
 export { lookUpPerson } from './lookup.js';
+
+export { fetchEntity } from './database/index.js';
