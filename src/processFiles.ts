@@ -6,7 +6,6 @@ import { copyFile as cpFile, doesContain, mkdir, rebaseFile } from './fileUtils.
 import { isSupportedFileType, processFile } from './processFile.js';
 
 export interface Options {
-    keep: boolean | undefined;
     output: string | undefined;
     root: string | undefined;
     cwd: string | undefined;
@@ -20,7 +19,7 @@ export interface ProcessFilesResult {
 }
 
 export async function processFiles(files: string[], options: Options): Promise<ProcessFilesResult> {
-    const { keep = false, output, root = process.cwd(), cwd = process.cwd(), dryRun, progress: logProgress } = options;
+    const { output, root = process.cwd(), cwd = process.cwd(), dryRun, progress: logProgress } = options;
 
     const filesWritten = new Map<string, Promise<void>>();
 
@@ -49,10 +48,6 @@ export async function processFiles(files: string[], options: Options): Promise<P
         await p;
     }
 
-    async function rm(file: string) {
-        !dryRun && (await fs.rm(file));
-    }
-
     async function writeFile(filename: string, content: string) {
         if (dryRun) return;
         // wait for any copies to finish before overwriting.
@@ -74,23 +69,14 @@ export async function processFiles(files: string[], options: Options): Promise<P
         await cp(src, target);
     }
 
-    async function removeSrcIfNecessary(filename: string) {
-        if (keep || fromDir !== toDir) return;
-        logProgress(`${relName(filename)} - ${chalk.yellow('renamed')}`);
-        await rm(filename);
-    }
-
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
         const filesToWrite = await processFile(src, fromDir, toDir);
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
-            logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Updated')}`);
+            logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);
             await mkFileDir(filename);
             writeFile(filename, content);
-            if (filename !== oldFilename) {
-                await removeSrcIfNecessary(src);
-            }
         }
     }
 

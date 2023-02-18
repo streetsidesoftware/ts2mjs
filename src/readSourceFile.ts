@@ -1,5 +1,5 @@
-import { readFile } from './fileUtils';
-import { SourceFile, SourceMap } from './SourceFile';
+import { readFile } from './fileUtils.js';
+import type { SourceFile, SourceMap } from './SourceFile.js';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 export const SOURCE_MAP_URL_MARKER = '//' + '# ' + 'sourceMappingURL' + '=';

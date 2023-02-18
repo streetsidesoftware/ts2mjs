@@ -1,12 +1,11 @@
-import MagicString from 'magic-string';
 import { basename, dirname, join as pathJoin, normalize, relative, sep as pathSep } from 'path';
-// import mergeMap from 'merge-source-map';
 
 import assert from 'assert';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
-import { SourceFile, SourceMap } from './SourceFile';
+import { SourceFile, SourceMap } from './SourceFile.js';
+import { createMagicString, SourceMap as MsSourceMap, MagicString } from '../lib/magicString.mjs';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
@@ -35,7 +34,7 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
 
     const exp = new RegExp(regExpImportExport);
 
-    const magicString = new MagicString(content, { filename: src.srcFilename });
+    const magicString = createMagicString(content, { filename: src.srcFilename });
 
     let linesChanged = 0;
     let match: RegExpExecArray | null;
@@ -57,7 +56,7 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
 
     const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
 
-    const sourceMap = remapSourceMap(mappings, magicString, filename);
+    const sourceMap = remapSourceMap(mappings, magicString, srcFilename, filename);
 
     if (!linesChanged)
         return {
@@ -111,12 +110,19 @@ function processSourceMap(sourceMap: AdjustedSourceMap): ProcessFileResult {
 function remapSourceMap(
     sourceMap: SourceMap | undefined,
     magicString: MagicString,
+    fromSourceFilename: string,
     toSourceFilename: string
 ): AdjustedSourceMap | undefined {
     if (!sourceMap) return undefined;
 
     const url = pathToFileURL(toSourceFilename + '.map');
-    return { url, oldUrl: sourceMap.url, map: sourceMap.map };
+
+    const oldMap = new MsSourceMap(JSON.parse(sourceMap.map));
+    const map = magicString.generateMap({ file: toSourceFilename, source: fromSourceFilename });
+
+    console.error('%o', [oldMap, map]);
+
+    return { url, oldUrl: sourceMap.url, map: map.toString() };
 }
 
 function addSourceMapToContent(content: string, sourceMap: AdjustedSourceMap | undefined): string {

@@ -36,7 +36,7 @@ describe('processFile', () => {
         file                          | root                | expected
         ${ff('sample/lib/image.css')} | ${ff('sample/lib')} | ${Error('Must be a supported file type.')}
         ${ff('sample/src/index.js')}  | ${ff('sample/lib')} | ${Error('Must be under root.')}
-    `('processFile skipped', async ({ file, root, expected }) => {
+    `('processFile not handled', async ({ file, root, expected }) => {
         const content = '';
         const target = ff('../temp/lib');
         expect(() => processSourceFile({ srcFilename: file, content }, root, target)).toThrowError(expected);

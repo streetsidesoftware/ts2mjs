@@ -19,9 +19,9 @@ describe('app', () => {
     test.each`
         args                                                    | expectedOutputs
         ${['.', '--root=dist', '--output=temp']}                | ${[sm(/app.js\b.*\bapp.mjs/), sc('done.')]}
-        ${['.', '--root=fixtures/sample/lib', '--output=temp']} | ${[sm(/index.js\b.*\bindex.mjs Updated/), sc('index.js.map - copy'), sc('done.')]}
-        ${['fixtures/sample/lib']}                              | ${[sm(/index.js\b.*\bindex.mjs Updated/), sc('index.js - renamed'), sc('done.')]}
-        ${['fixtures/sample/lib', '--keep']}                    | ${[sm(/index.js\b.*\bindex.mjs Updated/), sNc('index.js - renamed'), sc('done.')]}
+        ${['.', '--root=fixtures/sample/lib', '--output=temp']} | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('index.js.map - copy'), sc('done.')]}
+        ${['fixtures/sample/lib']}                              | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('done.')]}
+        ${['fixtures/sample/lib']}                              | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('done.')]}
         ${['not_found', '--no-must-find-files']}                | ${['done.']}
     `('run (--dry-run) $args', async ({ args, expectedOutputs }: { args: string[]; expectedOutputs: unknown[] }) => {
         const argv = genArgv(args);
@@ -40,7 +40,7 @@ describe('app', () => {
 
     test.each`
         args                                   | expectedOutputs
-        ${['.', '--root=fixtures/sample/lib']} | ${[sm(/index.js\b.*\bindex.mjs Updated/), sc('index.js.map - copy'), sc('done.')]}
+        ${['.', '--root=fixtures/sample/lib']} | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('index.js.map - copy'), sc('done.')]}
     `('run (actual) $args', async ({ args, expectedOutputs }: { args: string[]; expectedOutputs: unknown[] }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
         const argv = genArgv([...args, `--output=${tempDir}`], false);

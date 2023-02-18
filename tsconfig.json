@@ -5,9 +5,10 @@
         "module": "ES2020",
         "moduleResolution": "node16",
         "exactOptionalPropertyTypes": true,
+        "allowJs": true,
         "outDir": "dist",
         "newLine": "LF",
         "types": ["node"]
     },
-    "include": ["src"]
+    "include": ["src", "lib/magicString.mjs"]
 }
