@@ -1,12 +1,12 @@
-import { dirname, join as pathJoin, basename } from 'path';
-// import MagicString from 'magic-string';
+import MagicString from 'magic-string';
+import { basename, dirname, join as pathJoin, normalize, relative, sep as pathSep } from 'path';
 // import mergeMap from 'merge-source-map';
 
-import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import assert from 'assert';
-import { SourceFile, SourceMap } from './SourceFile';
-import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
+import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
+import { SourceFile, SourceMap } from './SourceFile';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
@@ -35,35 +35,29 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
 
     const exp = new RegExp(regExpImportExport);
 
-    const currentDir = dirname(srcFilename);
+    const magicString = new MagicString(content, { filename: src.srcFilename });
 
-    const segments: string[] = [];
     let linesChanged = 0;
-    let lastIndex = 0;
     let match: RegExpExecArray | null;
     while ((match = exp.exec(content))) {
         const { index } = match;
-        if (index > lastIndex) {
-            segments.push(content.slice(lastIndex, index));
-        }
-        lastIndex = exp.lastIndex;
 
         const line = match[0];
         const reference = match.groups?.['file'];
 
-        if (reference && isRelativePath(reference) && doesContain(srcRoot, pathJoin(currentDir, reference))) {
-            const newLine = line.replace(/\.js';/, ".mjs';");
-            segments.push(newLine);
-            linesChanged += linesChanged + (newLine === line ? 0 : 1);
+        if (reference && isRelativePath(reference)) {
+            const start = index + line.lastIndexOf(reference);
+            const end = start + reference.length;
+            const newRef = rebaseImport(reference, srcFilename, srcRoot, targetRoot);
+            magicString.update(start, end, newRef);
+            linesChanged += 1;
             continue;
         }
-
-        segments.push(line);
     }
 
     const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
 
-    const sourceMap = remapSourceMap(mappings, filename);
+    const sourceMap = remapSourceMap(mappings, magicString, filename);
 
     if (!linesChanged)
         return {
@@ -73,14 +67,10 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
             mappings: sourceMap,
         };
 
-    if (lastIndex < content.length) {
-        segments.push(content.slice(lastIndex));
-    }
-
     return {
         filename,
         oldFilename: srcFilename,
-        content: addSourceMapToContent(segments.join(''), sourceMap),
+        content: addSourceMapToContent(magicString.toString(), sourceMap),
         linesChanged,
         mappings: sourceMap,
     };
@@ -118,7 +108,11 @@ function processSourceMap(sourceMap: AdjustedSourceMap): ProcessFileResult {
     return pr;
 }
 
-function remapSourceMap(sourceMap: SourceMap | undefined, toSourceFilename: string): AdjustedSourceMap | undefined {
+function remapSourceMap(
+    sourceMap: SourceMap | undefined,
+    magicString: MagicString,
+    toSourceFilename: string
+): AdjustedSourceMap | undefined {
     if (!sourceMap) return undefined;
 
     const url = pathToFileURL(toSourceFilename + '.map');
@@ -130,4 +124,24 @@ function addSourceMapToContent(content: string, sourceMap: AdjustedSourceMap | u
 
     const nl = content.endsWith('\n') ? '' : '\n';
     return content + nl + SOURCE_MAP_URL_MARKER + basename(fileURLToPath(sourceMap.url));
+}
+
+function rebaseImport(importFile: string, currentFile: string, root: string, target: string): string {
+    const currentDir = dirname(currentFile);
+    const targetDir = dirname(rebaseFile(currentFile, root, target));
+
+    const importFileAbs = pathJoin(currentDir, importFile);
+
+    const relImport = doesContain(root, importFileAbs)
+        ? relative(currentDir, importFileAbs)
+        : relative(targetDir, importFileAbs);
+    const newImportFile = normalizeImport(relImport);
+    return newImportFile;
+}
+
+function normalizeImport(relativeImport: string): string {
+    relativeImport = normalize(relativeImport);
+    const ref = pathSep === '\\' ? relativeImport.replace(/[\\]/g, '/') : relativeImport;
+    const relRef = ('./' + ref).replace('./../', '../');
+    return relRef.replace(/\.js$/, '.mjs');
 }
