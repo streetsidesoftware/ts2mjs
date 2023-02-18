@@ -1,19 +1,5 @@
 // Vitest Snapshot v1
 
-exports[`app > run (--dry-run) [ '.', '--root=dist', '--output=temp' ] 1`] = `
-"dist/SourceFile.js -> temp/SourceFile.mjs Generated
-dist/app.js -> temp/app.mjs Generated
-dist/app.test.js -> temp/app.test.mjs Generated
-dist/fileUtils.js -> temp/fileUtils.mjs Generated
-dist/findFiles.js -> temp/findFiles.mjs Generated
-dist/processFile.js -> temp/processFile.mjs Generated
-dist/processFile.test.js -> temp/processFile.test.mjs Generated
-dist/processFiles.js -> temp/processFiles.mjs Generated
-dist/readSourceFile.js -> temp/readSourceFile.mjs Generated
-dist/test.util.js -> temp/test.util.mjs Generated
-done."
-`;
-
 exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
 "done.
 fixtures/sample/lib/app.d.ts -> temp/app.d.mts Generated

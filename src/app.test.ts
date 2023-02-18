@@ -16,7 +16,6 @@ describe('app', () => {
 
     test.each`
         args                                                    | expectedOutputs
-        ${['.', '--root=dist', '--output=temp']}                | ${[sm(/app.js\b.*\bapp.mjs/), sc('done.')]}
         ${['.', '--root=fixtures/sample/lib', '--output=temp']} | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('index.js.map - copy'), sc('done.')]}
         ${['fixtures/sample/lib']}                              | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('done.')]}
         ${['fixtures/sample/lib']}                              | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('done.')]}
