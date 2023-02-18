@@ -41,4 +41,4 @@ export interface Annotation extends EntityBase<'Annotation'> {
     note: string;
     madeBy: PersonGuid;
 }
-//# sourceMappingURL=types.d.ts.map
+//# sourceMappingURL=types.d.mts.map

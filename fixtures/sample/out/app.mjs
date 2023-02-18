@@ -9,4 +9,4 @@ export async function run() {
     }
     console.log(`Found: ${person.name}`);
 }
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=app.mjs.map

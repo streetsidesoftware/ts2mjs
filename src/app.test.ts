@@ -7,9 +7,7 @@ import { resolveTempUnique } from './test.util.js';
 
 // const oc = (a: object) => expect.objectContaining(a);
 const sc = (s: string) => expect.stringContaining(s);
-const sNc = (s: string) => expect.not.stringContaining(s);
 const sm = (s: string | RegExp) => expect.stringMatching(s);
-// const ac = <T>(a: T[]) => expect.arrayContaining(a);
 
 describe('app', () => {
     afterEach(() => {
