@@ -27,7 +27,7 @@ function readPackage(): Promise<Package> {
     return pkg;
 
     async function _readPackage(): Promise<Package> {
-        const pathPackageJson = path.join(__dirname, '../../package.json');
+        const pathPackageJson = path.join(__dirname, '../package.json');
         const packageJson = JSON.parse(await fs.readFile(pathPackageJson, 'utf8'));
         return packageJson;
     }

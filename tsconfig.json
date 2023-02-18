@@ -10,5 +10,5 @@
         "newLine": "LF",
         "types": ["node"]
     },
-    "include": ["src", "lib/magicString.mjs"]
+    "include": ["src"]
 }
