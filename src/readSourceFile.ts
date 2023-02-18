@@ -19,7 +19,7 @@ export async function readSourceFile(filename: string): Promise<SourceFile> {
     return {
         srcFilename: filename,
         content: srcContent,
-        mappings: sourceMap,
+        map: sourceMap,
     };
 }
 
@@ -38,7 +38,7 @@ export function getSourceMapRef(filename: string, content: string): SourceMapRef
 
 export async function readSourceMap(url: URL): Promise<SourceMap | undefined> {
     try {
-        return { mappings: await readFile(fileURLToPath(url)), url };
+        return { map: await readFile(fileURLToPath(url)), url };
     } catch (e) {
         // do not break if source map file is missing.
         return undefined;

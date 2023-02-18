@@ -28,7 +28,7 @@ export interface ProcessSourceFileResult extends ProcessFileResult {
 }
 
 export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: string): ProcessSourceFileResult {
-    const { srcFilename, content, mappings } = src;
+    const { srcFilename, content, map: mappings } = src;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
     assert(isSupportedFile.test(srcFilename), 'Must be a supported file type.');
@@ -101,7 +101,7 @@ function processSourceMap(sourceMap: AdjustedSourceMap): ProcessFileResult {
     const pr: ProcessFileResult = {
         filename: fileURLToPath(sourceMap.url),
         oldFilename: fileURLToPath(sourceMap.oldUrl),
-        content: sourceMap.mappings,
+        content: sourceMap.map,
         linesChanged: 1,
     };
 
@@ -116,7 +116,7 @@ function remapSourceMap(
     if (!sourceMap) return undefined;
 
     const url = pathToFileURL(toSourceFilename + '.map');
-    return { url, oldUrl: sourceMap.url, mappings: sourceMap.mappings };
+    return { url, oldUrl: sourceMap.url, map: sourceMap.map };
 }
 
 function addSourceMapToContent(content: string, sourceMap: AdjustedSourceMap | undefined): string {
@@ -126,7 +126,7 @@ function addSourceMapToContent(content: string, sourceMap: AdjustedSourceMap | u
     return content + nl + SOURCE_MAP_URL_MARKER + basename(fileURLToPath(sourceMap.url));
 }
 
-function rebaseImport(importFile: string, currentFile: string, root: string, target: string): string {
+function rebaseRelFileReference(importFile: string, currentFile: string, root: string, target: string): string {
     const currentDir = dirname(currentFile);
     const targetDir = dirname(rebaseFile(currentFile, root, target));
 
@@ -139,9 +139,14 @@ function rebaseImport(importFile: string, currentFile: string, root: string, tar
     return newImportFile;
 }
 
+function rebaseImport(importFile: string, currentFile: string, root: string, target: string): string {
+    const newImportFile = rebaseRelFileReference(importFile, currentFile, root, target).replace(/\.js$/, '.mjs');
+    return newImportFile;
+}
+
 function normalizeImport(relativeImport: string): string {
     relativeImport = normalize(relativeImport);
     const ref = pathSep === '\\' ? relativeImport.replace(/[\\]/g, '/') : relativeImport;
     const relRef = ('./' + ref).replace('./../', '../');
-    return relRef.replace(/\.js$/, '.mjs');
+    return relRef;
 }
