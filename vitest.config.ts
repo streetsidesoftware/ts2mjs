@@ -5,8 +5,9 @@ export default defineConfig({
         reporters: 'verbose',
         coverage: {
             // enabled: true,
+            // provider: 'istanbul',
             clean: true,
-            all: true,
+            all: false,
             reporter: ['html', 'text', 'lcov', 'json'],
             exclude: [
                 '_snapshots_',
@@ -15,8 +16,8 @@ export default defineConfig({
                 '**/*.test.*',
                 'bin.mjs',
                 'dist',
-                'fixtures/**',
-                'fixtures/**/*.js',
+                '**/fixtures/**',
+                '**/fixtures/sample/lib/*.js',
                 '**/*.d.mts',
                 '**/*.d.ts',
                 'vitest*',
