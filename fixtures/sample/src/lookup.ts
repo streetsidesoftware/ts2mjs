@@ -1,5 +1,5 @@
 import { Person, PersonGuid } from './types.js';
 
-export function lookUpPerson(_guid: PersonGuid): Person | undefined {
+export async function lookUpPerson(_guid: PersonGuid): Promise<Person | undefined> {
     return undefined;
 }

@@ -14,6 +14,12 @@ done."
 
 exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
 "done.
+fixtures/sample/lib/app.d.ts -> temp/app.d.mts Updated
+fixtures/sample/lib/app.d.ts.map - copy
+fixtures/sample/lib/app.d.ts.map -> temp/app.d.mts.map Updated
+fixtures/sample/lib/app.js -> temp/app.mjs Updated
+fixtures/sample/lib/app.js.map - copy
+fixtures/sample/lib/app.js.map -> temp/app.mjs.map Updated
 fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
 fixtures/sample/lib/database/fetch.d.ts.map - copy
 fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Updated
@@ -48,6 +54,14 @@ fixtures/sample/lib/types.js.map -> temp/types.mjs.map Updated"
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 "done.
+fixtures/sample/lib/app.d.ts - renamed
+fixtures/sample/lib/app.d.ts - renamed
+fixtures/sample/lib/app.d.ts -> fixtures/sample/lib/app.d.mts Updated
+fixtures/sample/lib/app.d.ts.map -> fixtures/sample/lib/app.d.mts.map Updated
+fixtures/sample/lib/app.js - renamed
+fixtures/sample/lib/app.js - renamed
+fixtures/sample/lib/app.js -> fixtures/sample/lib/app.mjs Updated
+fixtures/sample/lib/app.js.map -> fixtures/sample/lib/app.mjs.map Updated
 fixtures/sample/lib/database/fetch.d.ts - renamed
 fixtures/sample/lib/database/fetch.d.ts - renamed
 fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
@@ -92,6 +106,10 @@ fixtures/sample/lib/types.js.map -> fixtures/sample/lib/types.mjs.map Updated"
 
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib', '--keep' ] 1`] = `
 "done.
+fixtures/sample/lib/app.d.ts -> fixtures/sample/lib/app.d.mts Updated
+fixtures/sample/lib/app.d.ts.map -> fixtures/sample/lib/app.d.mts.map Updated
+fixtures/sample/lib/app.js -> fixtures/sample/lib/app.mjs Updated
+fixtures/sample/lib/app.js.map -> fixtures/sample/lib/app.mjs.map Updated
 fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Updated
 fixtures/sample/lib/database/fetch.d.ts.map -> fixtures/sample/lib/database/fetch.d.mts.map Updated
 fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Updated
@@ -118,6 +136,12 @@ exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `"d
 
 exports[`app > run (actual) [ '.', '--root=fixtures/sample/lib' ] 1`] = `
 "done.
+fixtures/sample/lib/app.d.ts -> temp/app.d.mts Updated
+fixtures/sample/lib/app.d.ts.map - copy
+fixtures/sample/lib/app.d.ts.map -> temp/app.d.mts.map Updated
+fixtures/sample/lib/app.js -> temp/app.mjs Updated
+fixtures/sample/lib/app.js.map - copy
+fixtures/sample/lib/app.js.map -> temp/app.mjs.map Updated
 fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Updated
 fixtures/sample/lib/database/fetch.d.ts.map - copy
 fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Updated
