@@ -1,8 +1,7 @@
 import chalk from 'chalk';
-import { promises as fs } from 'fs';
 import * as path from 'path';
 
-import { copyFile as cpFile, doesContain, mkdir, rebaseFile } from './fileUtils.js';
+import { copyFile as cpFile, doesContain, mkdir, rebaseFile, writeFile as writeFileP } from './fileUtils.js';
 import { isSupportedFileType, processFile } from './processFile.js';
 
 export interface Options {
@@ -52,7 +51,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
         if (dryRun) return;
         // wait for any copies to finish before overwriting.
         await filesWritten.get(filename);
-        const p = fs.writeFile(filename, content, 'utf-8');
+        const p = writeFileP(filename, content);
         filesWritten.set(filename, p);
         await p;
     }

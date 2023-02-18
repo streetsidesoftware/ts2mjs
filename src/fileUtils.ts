@@ -49,3 +49,8 @@ export async function mkdir(dir: string): Promise<void> {
 export async function readFile(filename: string): Promise<string> {
     return fs.readFile(filename, 'utf8');
 }
+
+export async function writeFile(filename: string, content: string): Promise<void> {
+    await mkdir(dirname(filename));
+    await fs.writeFile(filename, content, 'utf8');
+}
