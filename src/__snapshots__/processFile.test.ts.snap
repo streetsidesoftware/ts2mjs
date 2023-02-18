@@ -4,11 +4,11 @@ exports[`processFile > processFile 'sample/lib/index.d.ts' 1`] = `
 "export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.mjs';
 export { lookUpPerson } from './lookup.mjs';
 export { fetchEntity } from './database/index.mjs';
-"
+//# sourceMappingURL=index.d.mts.map"
 `;
 
 exports[`processFile > processFile 'sample/lib/index.js' 1`] = `
 "export { lookUpPerson } from './lookup.mjs';
 export { fetchEntity } from './database/index.mjs';
-"
+//# sourceMappingURL=index.mjs.map"
 `;

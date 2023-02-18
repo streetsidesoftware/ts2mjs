@@ -1,11 +1,11 @@
-import { dirname, join as pathJoin } from 'path';
+import { dirname, join as pathJoin, basename } from 'path';
 // import MagicString from 'magic-string';
 // import mergeMap from 'merge-source-map';
 
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import assert from 'assert';
 import { SourceFile, SourceMap } from './SourceFile';
-import { readSourceFile } from './readSourceFile.js';
+import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
@@ -65,13 +65,25 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
 
     const sourceMap = remapSourceMap(mappings, filename);
 
-    if (!linesChanged) return { filename, oldFilename: srcFilename, content, mappings: sourceMap };
+    if (!linesChanged)
+        return {
+            filename,
+            oldFilename: srcFilename,
+            content: addSourceMapToContent(content, sourceMap),
+            mappings: sourceMap,
+        };
 
     if (lastIndex < content.length) {
         segments.push(content.slice(lastIndex));
     }
 
-    return { filename, oldFilename: srcFilename, content: segments.join(''), linesChanged, mappings: sourceMap };
+    return {
+        filename,
+        oldFilename: srcFilename,
+        content: addSourceMapToContent(segments.join(''), sourceMap),
+        linesChanged,
+        mappings: sourceMap,
+    };
 }
 
 export function isSupportedFileType(filename: string): boolean {
@@ -111,4 +123,11 @@ function remapSourceMap(sourceMap: SourceMap | undefined, toSourceFilename: stri
 
     const url = pathToFileURL(toSourceFilename + '.map');
     return { url, oldUrl: sourceMap.url, mappings: sourceMap.mappings };
+}
+
+function addSourceMapToContent(content: string, sourceMap: AdjustedSourceMap | undefined): string {
+    if (!sourceMap) return content;
+
+    const nl = content.endsWith('\n') ? '' : '\n';
+    return content + nl + SOURCE_MAP_URL_MARKER + basename(fileURLToPath(sourceMap.url));
 }
