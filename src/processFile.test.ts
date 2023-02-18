@@ -10,9 +10,10 @@ const oc = (obj: unknown) => expect.objectContaining(obj);
 
 describe('processFile', () => {
     test.each`
-        file                       | root            | target      | expected
-        ${'sample/lib/index.js'}   | ${'sample/lib'} | ${'target'} | ${{ filename: 'target/index.mjs', linesChanged: 2 }}
-        ${'sample/lib/index.d.ts'} | ${'sample/lib'} | ${'target'} | ${{ filename: 'target/index.d.mts', linesChanged: 3 }}
+        file                                | root                     | target      | expected
+        ${'sample/lib/index.js'}            | ${'sample/lib'}          | ${'target'} | ${{ filename: 'target/index.mjs', linesChanged: 2 }}
+        ${'sample/lib/index.d.ts'}          | ${'sample/lib'}          | ${'target'} | ${{ filename: 'target/index.d.mts', linesChanged: 3 }}
+        ${'sample/lib/database/fetch.d.ts'} | ${'sample/lib/database'} | ${'target'} | ${{ filename: 'target/fetch.d.mts', linesChanged: 1 }}
     `('processFile $file', async ({ file, root, target, expected }) => {
         const resolveTemp = resolverTemp();
         file = ff(file);
