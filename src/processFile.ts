@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { createMagicString, MagicString } from '../lib/magicString.mjs';
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
-import { SourceFile, SourceMap } from './SourceFile.js';
+import type { SourceFile, SourceMap } from './SourceFile.js';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
