@@ -1,0 +1,73 @@
+// Vitest Snapshot v1
+
+exports[`app > run (--dry-run) [ '.', '--root=dist', '--output=temp' ] 1`] = `
+"dist/app.js -> temp/app.mjs Updated
+dist/app.test.js -> temp/app.test.mjs Updated
+dist/fileUtils.js -> temp/fileUtils.mjs Updated
+dist/findFiles.js -> temp/findFiles.mjs Updated
+dist/processFile.js -> temp/processFile.mjs Updated
+dist/processFile.test.js -> temp/processFile.test.mjs Updated
+dist/processFiles.js -> temp/processFiles.mjs Updated
+dist/test.util.js -> temp/test.util.mjs Updated
+done."
+`;
+
+exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
+"done.
+fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
+fixtures/sample/lib/index.d.ts.map - copy
+fixtures/sample/lib/index.js -> temp/index.mjs Updated
+fixtures/sample/lib/index.js.map - copy
+fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Updated
+fixtures/sample/lib/lookup.d.ts.map - copy
+fixtures/sample/lib/lookup.js -> temp/lookup.mjs Updated
+fixtures/sample/lib/lookup.js.map - copy
+fixtures/sample/lib/types.d.ts -> temp/types.d.mts Updated
+fixtures/sample/lib/types.d.ts.map - copy
+fixtures/sample/lib/types.js -> temp/types.mjs Updated
+fixtures/sample/lib/types.js.map - copy"
+`;
+
+exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
+"done.
+fixtures/sample/lib/index.d.ts - renamed
+fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
+fixtures/sample/lib/index.js - renamed
+fixtures/sample/lib/index.js -> fixtures/sample/lib/index.mjs Updated
+fixtures/sample/lib/lookup.d.ts - renamed
+fixtures/sample/lib/lookup.d.ts -> fixtures/sample/lib/lookup.d.mts Updated
+fixtures/sample/lib/lookup.js - renamed
+fixtures/sample/lib/lookup.js -> fixtures/sample/lib/lookup.mjs Updated
+fixtures/sample/lib/types.d.ts - renamed
+fixtures/sample/lib/types.d.ts -> fixtures/sample/lib/types.d.mts Updated
+fixtures/sample/lib/types.js - renamed
+fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
+`;
+
+exports[`app > run (--dry-run) [ 'fixtures/sample/lib', '--keep' ] 1`] = `
+"done.
+fixtures/sample/lib/index.d.ts -> fixtures/sample/lib/index.d.mts Updated
+fixtures/sample/lib/index.js -> fixtures/sample/lib/index.mjs Updated
+fixtures/sample/lib/lookup.d.ts -> fixtures/sample/lib/lookup.d.mts Updated
+fixtures/sample/lib/lookup.js -> fixtures/sample/lib/lookup.mjs Updated
+fixtures/sample/lib/types.d.ts -> fixtures/sample/lib/types.d.mts Updated
+fixtures/sample/lib/types.js -> fixtures/sample/lib/types.mjs Updated"
+`;
+
+exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `"done."`;
+
+exports[`app > run (actual) [ '.', …(2) ] 1`] = `
+"done.
+fixtures/sample/lib/index.d.ts -> temp/index.d.mts Updated
+fixtures/sample/lib/index.d.ts.map - copy
+fixtures/sample/lib/index.js -> temp/index.mjs Updated
+fixtures/sample/lib/index.js.map - copy
+fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Updated
+fixtures/sample/lib/lookup.d.ts.map - copy
+fixtures/sample/lib/lookup.js -> temp/lookup.mjs Updated
+fixtures/sample/lib/lookup.js.map - copy
+fixtures/sample/lib/types.d.ts -> temp/types.d.mts Updated
+fixtures/sample/lib/types.d.ts.map - copy
+fixtures/sample/lib/types.js -> temp/types.mjs Updated
+fixtures/sample/lib/types.js.map - copy"
+`;

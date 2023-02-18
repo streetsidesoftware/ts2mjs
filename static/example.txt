@@ -1,0 +1,16 @@
+Find Files:
+ - LICENSE
+ - README.md
+ - bin.mjs
+ - coverage
+ - cspell.config.yaml
+ - dist
+ - package.json
+ - pnpm-lock.yaml
+ - release-please-config.json
+ - scripts
+ - src
+ - static
+ - tsconfig.json
+ - vitest.config.ts
+done.
