@@ -6,6 +6,7 @@ import { createMagicString, MagicString } from '../lib/magicString.mjs';
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
+import { UsageError } from './errors.js';
 
 const isSupportedFile = /\.(m?js|d\.m?ts)$/;
 
@@ -53,9 +54,10 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
                     srcRoot,
                     srcFilename
                 )})`;
-                console.error(message);
                 if (!allowJsOutsideOfRoot) {
-                    throw new Error(message);
+                    throw new UsageError(message);
+                } else {
+                    options.warning(message);
                 }
             }
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot);
@@ -94,6 +96,7 @@ export interface ProcessFileOptions {
     root: string;
     target: string;
     allowJsOutsideOfRoot?: boolean;
+    warning: (msg: string) => void;
 }
 
 export async function processFile(filename: string, options: ProcessFileOptions): Promise<ProcessFileResult[]> {

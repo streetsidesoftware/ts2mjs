@@ -29,6 +29,12 @@ export interface Options {
      */
     progress: (message: string) => void;
     /**
+     * Method to log warnings.
+     * @param message - message to write
+     * @returns
+     */
+    warning: ((message: string) => void) | undefined;
+    /**
      * The root directory, files outside of the root will NOT be copied.
      */
     root: string | undefined;
@@ -47,6 +53,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
         dryRun,
         progress: logProgress,
         allowJsOutsideOfRoot = false,
+        warning = console.warn,
     } = options;
 
     const filesWritten = new Map<string, Promise<void>>();
@@ -99,7 +106,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
 
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
-        const filesToWrite = await processFile(src, { root: fromDir, target: toDir, allowJsOutsideOfRoot });
+        const filesToWrite = await processFile(src, { root: fromDir, target: toDir, allowJsOutsideOfRoot, warning });
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
             logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);

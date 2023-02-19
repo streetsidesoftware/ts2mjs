@@ -4,6 +4,7 @@ import { program as defaultCommand } from 'commander';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { UsageError } from './errors.js';
 
 import { findFiles } from './findFiles.js';
 import type { Options as ProcessFilesOptions } from './processFiles.js';
@@ -85,11 +86,15 @@ export async function app(program = defaultCommand): Promise<Command> {
                     console.log(msg);
                 }
             }
+            function warning(msg: string) {
+                console.warn(chalk.yellowBright(msg));
+            }
             const processOptions: ProcessFilesOptions = {
                 cwd: optionsCli.cwd,
                 dryRun: optionsCli.dryRun || false,
                 output: optionsCli.output,
                 progress: logger,
+                warning,
                 root: optionsCli.root,
                 allowJsOutsideOfRoot: !(optionsCli.enforceRoot ?? true),
             };
@@ -103,5 +108,14 @@ export async function app(program = defaultCommand): Promise<Command> {
 
 export async function run(argv?: string[], program?: Command): Promise<void> {
     const prog = await app(program);
-    await prog.parseAsync(argv);
+    try {
+        await prog.parseAsync(argv);
+    } catch (e) {
+        if (e instanceof UsageError) {
+            console.error(chalk.red('Error ') + e.message);
+            process.exitCode = process.exitCode || 1;
+            return;
+        }
+        throw e;
+    }
 }
