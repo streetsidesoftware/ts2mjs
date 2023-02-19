@@ -13,7 +13,7 @@ export function resolveFixture(...parts: string[]): string {
 }
 
 export function resolverTemp(): (...parts: string[]) => string {
-    const tempDir = resolve(tempBase, new Date().toISOString(), nonce()).replace(/[:]/g, '.');
+    const tempDir = resolve(tempBase, new Date().toISOString().replace(/[:]/g, '.'), nonce());
 
     return (...parts: string[]) => {
         return resolve(tempDir, ...parts);

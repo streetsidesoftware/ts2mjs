@@ -137,7 +137,6 @@ function rebaseRelFileReference(importFile: string, currentFile: string, root: s
         ? relative(currentDir, importFileAbs)
         : relative(targetDir, importFileAbs);
     const newImportFile = normalizeImport(relImport);
-    console.error('%o', { importFile, newImportFile, currentFile, root, target });
     return newImportFile;
 }
 
