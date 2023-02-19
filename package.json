@@ -19,11 +19,14 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -p .",
+    "build:all": "pnpm build && pnpm build:fixtures && pnpm build:readme",
     "build:fixtures": "tsc -p fixtures/sample && ./bin.mjs . --root fixtures/sample/lib --output fixtures/sample/out ",
     "build:readme": "pnpm build:readme:help && pnpm build:readme:inject && prettier -w README.md",
     "build:readme:help": "./bin.mjs --help > static/help.txt",
     "build:readme:inject": "inject-markdown README.md",
     "watch": "tsc -p . --watch",
+    "clean": "shx rm -rf dist temp coverage",
+    "clean-build": "pnpm clean && shx rm -rf fixtures/sample/lib fixtures/sample/out && pnpm build:all",
     "coverage": "vitest run --coverage",
     "lint": "pnpm eslint && pnpm prettier",
     "lint:fix": "pnpm eslint:fix && pnpm prettier:fix",
@@ -67,6 +70,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "inject-markdown": "^1.3.0",
     "prettier": "^2.8.1",
+    "shx": "^0.3.4",
     "typescript": "^4.9.4",
     "vite": "^4.0.3",
     "vitest": "^0.28.5"

@@ -5,11 +5,39 @@ import { copyFile as cpFile, doesContain, mkdir, rebaseFile, writeFile as writeF
 import { isSupportedFileType, processFile } from './processFile.js';
 
 export interface Options {
-    output: string | undefined;
-    root: string | undefined;
+    /**
+     * Allow `.js` files to be imported outside of the root directory.
+     * This is most likely an error, so it is `false` by default.
+     * @default false
+     */
+    allowJsOutsideOfRoot: boolean | undefined;
+    /**
+     * The current directory used to resolve root, output, and file globs.
+     */
     cwd: string | undefined;
-    progress: (message: string) => void;
+    /**
+     * Dry Run, do not actually write files.
+     */
     dryRun: boolean;
+    /**
+     * The target directory, the default is to write in place.
+     */
+    output: string | undefined;
+    /**
+     * Report on progress.
+     * @param message - message
+     */
+    progress: (message: string) => void;
+    /**
+     * Method to log warnings.
+     * @param message - message to write
+     * @returns
+     */
+    warning: ((message: string) => void) | undefined;
+    /**
+     * The root directory, files outside of the root will NOT be copied.
+     */
+    root: string | undefined;
 }
 
 export interface ProcessFilesResult {
@@ -18,7 +46,15 @@ export interface ProcessFilesResult {
 }
 
 export async function processFiles(files: string[], options: Options): Promise<ProcessFilesResult> {
-    const { output, root = process.cwd(), cwd = process.cwd(), dryRun, progress: logProgress } = options;
+    const {
+        output,
+        root = process.cwd(),
+        cwd = process.cwd(),
+        dryRun,
+        progress: logProgress,
+        allowJsOutsideOfRoot = false,
+        warning = console.warn,
+    } = options;
 
     const filesWritten = new Map<string, Promise<void>>();
 
@@ -70,7 +106,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
 
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
-        const filesToWrite = await processFile(src, fromDir, toDir);
+        const filesToWrite = await processFile(src, { root: fromDir, target: toDir, allowJsOutsideOfRoot, warning });
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
             logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);

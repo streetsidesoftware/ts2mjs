@@ -4,6 +4,7 @@ import { program as defaultCommand } from 'commander';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { UsageError } from './errors.js';
 
 import { findFiles } from './findFiles.js';
 import type { Options as ProcessFilesOptions } from './processFiles.js';
@@ -51,9 +52,18 @@ interface CliOptions {
     color?: boolean;
     dryRun?: boolean;
     verbose?: boolean;
+    enforceRoot?: boolean;
 }
 
-export async function app(program = defaultCommand): Promise<Command> {
+export interface AppLogger {
+    log: (msg: string) => void;
+    error: (msg: string) => void;
+    warn: (msg: string) => void;
+}
+
+export async function app(program = defaultCommand, logger?: AppLogger): Promise<Command> {
+    const con = logger || console;
+
     program
         .name((await getName()) || 'ts2mjs')
         .description('Rename ESM .js files to .mjs')
@@ -61,8 +71,9 @@ export async function app(program = defaultCommand): Promise<Command> {
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')
-        .option('--no-must-find-files', 'No error if files are not found.')
         .option('--dry-run', 'Dry Run do not update files.')
+        .option('--no-must-find-files', 'No error if files are not found.')
+        .option('--no-enforce-root', 'Do not fail if relative `.js` files outside of the root are imported.')
         .option('--color', 'Force color.')
         .option('--no-color', 'Do not use color.')
         .option('-v, --verbose', 'Verbose mode')
@@ -78,27 +89,42 @@ export async function app(program = defaultCommand): Promise<Command> {
             if (!files.length && optionsCli.mustFindFiles) {
                 program.error('No files found.');
             }
-            function logger(msg: string) {
+            function log(msg: string) {
                 if (optionsCli.dryRun || optionsCli.verbose) {
-                    console.log(msg);
+                    con.log(msg);
                 }
+            }
+            function warning(msg: string) {
+                con.error(chalk.yellowBright('Warning: ') + msg);
             }
             const processOptions: ProcessFilesOptions = {
                 cwd: optionsCli.cwd,
                 dryRun: optionsCli.dryRun || false,
                 output: optionsCli.output,
-                progress: logger,
+                progress: log,
+                warning,
                 root: optionsCli.root,
+                allowJsOutsideOfRoot: !(optionsCli.enforceRoot ?? true),
             };
             await processFiles(files, processOptions);
-            logger(chalk.green('done.'));
+            log(chalk.green('done.'));
         });
 
     program.showHelpAfterError();
     return program;
 }
 
-export async function run(argv?: string[], program?: Command): Promise<void> {
-    const prog = await app(program);
-    await prog.parseAsync(argv);
+export async function run(argv?: string[], program?: Command, logger?: AppLogger): Promise<void> {
+    const con = logger || console;
+    const prog = await app(program, logger);
+    try {
+        await prog.parseAsync(argv);
+    } catch (e) {
+        if (e instanceof UsageError) {
+            con.error(chalk.red('Error: ') + e.message);
+            process.exitCode = process.exitCode || 1;
+            return;
+        }
+        throw e;
+    }
 }
