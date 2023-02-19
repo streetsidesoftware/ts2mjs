@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.0...v1.1.1) (2023-02-19)
+
+
+### Bug Fixes
+
+* Error on import outside of root ([#6](https://github.com/streetsidesoftware/ts2mjs/issues/6)) ([d54787c](https://github.com/streetsidesoftware/ts2mjs/commit/d54787c368536c85172ca7e8397d86331679db43))
+
 ## [1.1.0](https://github.com/streetsidesoftware/ts2mjs/compare/v1.0.0...v1.1.0) (2023-02-19)
 
 
