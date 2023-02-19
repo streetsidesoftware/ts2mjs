@@ -41,6 +41,8 @@ exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
 [log]: fixtures/sample/lib/types.js.map -> temp/types.mjs.map Generated
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -85,6 +87,8 @@ exports[`app > run (--dry-run) [ '.', …(2) ] 2`] = `
 [log]: types.js.map -> ../../../temp/fixtures/sample/lib/types.mjs.map Generated
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -117,6 +121,8 @@ exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 [log]: fixtures/sample/lib/types.js.map -> fixtures/sample/lib/types.mjs.map Generated
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -149,6 +155,8 @@ exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 2`] = `
 [log]: fixtures/sample/lib/types.js.map -> fixtures/sample/lib/types.mjs.map Generated
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -157,6 +165,8 @@ exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `
 [log]: done.
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -168,6 +178,8 @@ exports[`app > run (actual) (errors and warnings) [ '.', …(1) ] 1`] = `
 [log]: fixtures/sample/lib/database/index.js.map - copy
 [warn]: 
 [error]: Error: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -188,6 +200,8 @@ exports[`app > run (actual) (errors and warnings) [ '.', …(2) ] 1`] = `
 [log]: fixtures/sample/lib/database/index.js.map -> temp/index.mjs.map Generated
 [warn]: 
 [error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)
+[stdout]: 
+[stderr]: 
 "
 `;
 
@@ -287,5 +301,37 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
 [log]: fixtures/sample/tsconfig.json - copy
 [warn]: 
 [error]: 
+[stdout]: 
+[stderr]: 
+"
+`;
+
+exports[`app > run error '--help' 1`] = `
+"Console Output:
+[log]: 
+[warn]: 
+[error]: 
+[stdout]: Usage: ts2mjs [options] <files...>
+[stdout]: 
+[stdout]: Rename ESM .js files to .mjs
+[stdout]: 
+[stdout]: Arguments:
+[stdout]:   files                 The files to rename.
+[stdout]: 
+[stdout]: Options:
+[stdout]:   -o, --output <dir>    The output directory.
+[stdout]:   --cwd <dir>           The current working directory.
+[stdout]:   --root <dir>          The root directory.
+[stdout]:   --dry-run             Dry Run do not update files.
+[stdout]:   --no-must-find-files  No error if files are not found.
+[stdout]:   --no-enforce-root     Do not fail if relative \`.js\` files outside of the root
+[stdout]:                         are imported.
+[stdout]:   --color               Force color.
+[stdout]:   --no-color            Do not use color.
+[stdout]:   -v, --verbose         Verbose mode
+[stdout]:   -V, --version         output the version number
+[stdout]:   -h, --help            display help for command
+[stdout]: 
+[stderr]: 
 "
 `;

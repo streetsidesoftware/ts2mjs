@@ -26,7 +26,7 @@ describe('app', () => {
         const argv = genArgv(args);
         const context = createRunContext();
         await expect(run(argv, context)).resolves.toBeUndefined();
-        const output = context.output();
+        const output = context.output({ sort: true });
         for (const expected of expectedOutputs) {
             expect(output).toEqual(expected);
         }
@@ -41,7 +41,7 @@ describe('app', () => {
         const argv = genArgv([...args, `--output=${tempDir}`], { dryRun: false });
         const context = createRunContext();
         await expect(run(argv, context)).resolves.toBeUndefined();
-        const output = context.output({ replacements: [tempDir, 'temp'] });
+        const output = context.output({ sort: true, replacements: [tempDir, 'temp'] });
         for (const expected of expectedOutputs) {
             expect(output).toEqual(expected);
         }
@@ -57,7 +57,7 @@ describe('app', () => {
         const argv = genArgv([...args, `--output=${tempDir}`], { dryRun: false });
         const context = createRunContext();
         await expect(run(argv, context)).resolves.toBeUndefined();
-        const output = context.output({ replacements: [tempDir, 'temp'] });
+        const output = context.output({ sort: true, replacements: [tempDir, 'temp'] });
         expect(output).toMatchSnapshot();
     });
 
@@ -68,6 +68,7 @@ describe('app', () => {
         const argv = genArgv(args);
         const context = createRunContext();
         await expect(run(argv, context)).rejects.toBeInstanceOf(CommanderError);
+        expect(context.output()).toMatchSnapshot();
     });
 });
 
@@ -92,6 +93,8 @@ Console Output:
 ${prefix(outputToString(logger.log.mock.calls, sort, replacements), '[log]: ')}
 ${prefix(outputToString(logger.warn.mock.calls, sort, replacements), '[warn]: ')}
 ${prefix(outputToString(logger.error.mock.calls, sort, replacements), '[error]: ')}
+${prefix(outputToString(logger.stdout.mock.calls, false, undefined), '[stdout]: ')}
+${prefix(outputToString(logger.stderr.mock.calls, false, undefined), '[stderr]: ')}
 `;
 }
 
@@ -99,7 +102,7 @@ function prefix(text: string, pfx: string): string {
     return pfx + text.split('\n').join('\n' + pfx);
 }
 
-function outputToString(calls: unknown[][], sort = true, replacements?: [oldVal: string, newVal: string]): string {
+function outputToString(calls: unknown[][], sort = false, replacements?: [oldVal: string, newVal: string]): string {
     const callLines = calls.map((call) => call.join('|'));
     if (sort) {
         callLines.sort();
@@ -121,6 +124,8 @@ interface AppLogger {
     log: Mock<[string], void>;
     warn: Mock<[string], void>;
     error: Mock<[string], void>;
+    stderr: Mock<[string], void>;
+    stdout: Mock<[string], void>;
 }
 
 function getAppLogger(): AppLogger {
@@ -128,6 +133,8 @@ function getAppLogger(): AppLogger {
         log: vi.fn<[string], void>(),
         warn: vi.fn<[string], void>(),
         error: vi.fn<[string], void>(),
+        stderr: vi.fn<[string], void>(),
+        stdout: vi.fn<[string], void>(),
     };
 }
 
@@ -142,11 +149,15 @@ interface RunContext {
 }
 
 function createRunContext(): RunContext {
+    const logger = getAppLogger();
     const program = new Command();
+    program.configureOutput({
+        writeOut: logger.stdout,
+        writeErr: logger.stderr,
+    });
     program.exitOverride((e) => {
         throw e;
     });
-    const logger = getAppLogger();
 
     function output(opts?: FormatOptions) {
         return formatOutput(logger, opts);
