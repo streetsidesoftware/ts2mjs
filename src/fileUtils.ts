@@ -1,4 +1,4 @@
-import { isAbsolute, relative, resolve } from 'path';
+import { dirname, isAbsolute, relative, resolve } from 'path';
 import { promises as fs } from 'fs';
 
 const regExpIsRelative = /^\.\.?[/\\]/;
@@ -38,5 +38,19 @@ export function rebaseFile(filename: string, fromDir: string, toDir: string): st
 
 export async function copyFile(fromFile: string, toFile: string): Promise<void> {
     const buff = await fs.readFile(fromFile);
+    await mkdir(dirname(toFile));
     await fs.writeFile(toFile, buff);
+}
+
+export async function mkdir(dir: string): Promise<void> {
+    await fs.mkdir(dir, { recursive: true });
+}
+
+export async function readFile(filename: string): Promise<string> {
+    return fs.readFile(filename, 'utf8');
+}
+
+export async function writeFile(filename: string, content: string): Promise<void> {
+    await mkdir(dirname(filename));
+    await fs.writeFile(filename, content, 'utf8');
 }

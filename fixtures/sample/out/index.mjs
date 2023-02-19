@@ -1,2 +1,3 @@
 export { lookUpPerson } from './lookup.mjs';
-//# sourceMappingURL=index.js.map
+export { fetchEntity } from './database/index.mjs';
+//# sourceMappingURL=index.mjs.map

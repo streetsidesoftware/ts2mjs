@@ -49,7 +49,6 @@ interface CliOptions {
     cwd?: string;
     output?: string;
     color?: boolean;
-    keep?: boolean;
     dryRun?: boolean;
     verbose?: boolean;
 }
@@ -59,7 +58,6 @@ export async function app(program = defaultCommand): Promise<Command> {
         .name((await getName()) || 'ts2mjs')
         .description('Rename ESM .js files to .mjs')
         .argument('<files...>', 'The files to rename.')
-        .option('-k, --keep', 'Keep the original files.')
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')
@@ -88,7 +86,6 @@ export async function app(program = defaultCommand): Promise<Command> {
             const processOptions: ProcessFilesOptions = {
                 cwd: optionsCli.cwd,
                 dryRun: optionsCli.dryRun || false,
-                keep: optionsCli.keep,
                 output: optionsCli.output,
                 progress: logger,
                 root: optionsCli.root,

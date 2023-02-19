@@ -1,13 +1,10 @@
-import assert from 'assert';
 import chalk from 'chalk';
-import { promises as fs } from 'fs';
 import * as path from 'path';
 
-import { doesContain, rebaseFile, copyFile as cpFile } from './fileUtils.js';
+import { copyFile as cpFile, doesContain, mkdir, rebaseFile, writeFile as writeFileP } from './fileUtils.js';
 import { isSupportedFileType, processFile } from './processFile.js';
 
 export interface Options {
-    keep: boolean | undefined;
     output: string | undefined;
     root: string | undefined;
     cwd: string | undefined;
@@ -21,7 +18,9 @@ export interface ProcessFilesResult {
 }
 
 export async function processFiles(files: string[], options: Options): Promise<ProcessFilesResult> {
-    const { keep = false, output, root = process.cwd(), cwd = process.cwd(), dryRun, progress: logProgress } = options;
+    const { output, root = process.cwd(), cwd = process.cwd(), dryRun, progress: logProgress } = options;
+
+    const filesWritten = new Map<string, Promise<void>>();
 
     const result: ProcessFilesResult = {
         fileCount: 0,
@@ -36,19 +35,25 @@ export async function processFiles(files: string[], options: Options): Promise<P
     }
 
     async function mkFileDir(filename: string) {
-        !dryRun && (await fs.mkdir(path.dirname(filename), { recursive: true }));
+        !dryRun && (await mkdir(path.dirname(filename)));
     }
 
     async function cp(src: string, dst: string) {
-        !dryRun && (await cpFile(src, dst));
-    }
-
-    async function rm(file: string) {
-        !dryRun && (await fs.rm(file));
+        if (dryRun) return;
+        // Copy will not overwrite a file that has already been written.
+        if (filesWritten.has(dst)) return;
+        const p = cpFile(src, dst);
+        filesWritten.set(dst, p);
+        await p;
     }
 
     async function writeFile(filename: string, content: string) {
-        !dryRun && (await fs.writeFile(filename, content, 'utf-8'));
+        if (dryRun) return;
+        // wait for any copies to finish before overwriting.
+        await filesWritten.get(filename);
+        const p = writeFileP(filename, content);
+        filesWritten.set(filename, p);
+        await p;
     }
 
     async function copyFile(filename: string) {
@@ -63,32 +68,33 @@ export async function processFiles(files: string[], options: Options): Promise<P
         await cp(src, target);
     }
 
-    async function removeSrcIfNecessary(filename: string) {
-        if (keep || fromDir !== toDir) return;
-        logProgress(`${relName(filename)} - ${chalk.yellow('renamed')}`);
-        await rm(filename);
-    }
-
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
-        const content = await fs.readFile(src, 'utf8');
-        const result = processFile(src, content, fromDir);
-        assert(!result.skipped, 'File should have been already filtered out.');
-        const dst = rebaseFile(result.filename, fromDir, toDir);
-        logProgress(`${relName(src)} -> ${relName(dst)} ${chalk.green('Updated')}`);
-        await mkFileDir(dst);
-        writeFile(dst, result.content);
-        if (dst !== src) {
-            await removeSrcIfNecessary(src);
+        const filesToWrite = await processFile(src, fromDir, toDir);
+        for (const fileToWrite of filesToWrite) {
+            const { filename, oldFilename, content } = fileToWrite;
+            logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);
+            await mkFileDir(filename);
+            writeFile(filename, content);
         }
     }
 
     const pending: Promise<void>[] = [];
 
+    // Process files first
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        pending.push(!isSupportedFileType(filename) ? copyFile(filename) : handleFile(filename));
+        if (!isSupportedFileType(filename)) continue;
+        pending.push(handleFile(filename));
+    }
+
+    // Copy files second
+    for (const file of files) {
+        const filename = path.resolve(cwd, file);
+        if (!doesContain(fromDir, file)) continue;
+        if (isSupportedFileType(filename)) continue;
+        pending.push(copyFile(filename));
     }
 
     await Promise.all(pending);

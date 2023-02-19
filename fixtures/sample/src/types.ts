@@ -5,10 +5,19 @@ export type GUID = string;
 
 export type AddressGuid = GUID;
 
-export interface Address {
+export interface EntityBase<T extends string> {
+    guid: GUID;
+    type: T;
+}
+
+export interface Entity {
+    guid: GUID;
+    type: string;
+}
+
+export interface Address extends EntityBase<'Address'> {
     guid: AddressGuid;
     name: string;
-    type: string;
     street: string;
     city: string;
     postalCode: string;
@@ -20,17 +29,16 @@ export interface Address {
 
 export type PhoneNumberGuid = GUID;
 
-export interface PhoneNumber {
+export interface PhoneNumber extends EntityBase<'PhoneNumber'> {
     guid: PhoneNumberGuid;
     name: string;
-    type: string;
     number: string;
     annotations?: Annotation[];
 }
 
 export type PersonGuid = GUID;
 
-export interface Person {
+export interface Person extends EntityBase<'Person'> {
     guid: PersonGuid;
     name: string;
     aliases?: string[];
@@ -39,8 +47,7 @@ export interface Person {
     notes?: Annotation[];
 }
 
-export interface Annotation {
+export interface Annotation extends EntityBase<'Annotation'> {
     note: string;
-    type: string;
     madeBy: PersonGuid;
 }
