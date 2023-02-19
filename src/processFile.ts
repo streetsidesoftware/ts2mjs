@@ -26,11 +26,12 @@ export interface ProcessSourceFileResult extends ProcessFileResult {
     mappings: AdjustedSourceMap | undefined;
 }
 
-export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: string): ProcessSourceFileResult {
+export function processSourceFile(src: SourceFile, options: ProcessFileOptions): ProcessSourceFileResult {
     const { srcFilename, content, map: mappings } = src;
+    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot } = options;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
-    assert(isSupportedFile.test(srcFilename), 'Must be a supported file type.');
+    assert(isSupportedFile.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
 
     const exp = new RegExp(regExpImportExport);
 
@@ -47,7 +48,17 @@ export function processSourceFile(src: SourceFile, srcRoot: string, targetRoot: 
         if (reference && isRelativePath(reference)) {
             const start = index + line.lastIndexOf(reference);
             const end = start + reference.length;
-            const newRef = rebaseImport(reference, srcFilename, srcRoot, targetRoot);
+            if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
+                const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
+                    srcRoot,
+                    srcFilename
+                )})`;
+                console.error(message);
+                if (!allowJsOutsideOfRoot) {
+                    throw new Error(message);
+                }
+            }
+            const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot);
             magicString.update(start, end, newRef);
             linesChanged += 1;
             continue;
@@ -79,9 +90,15 @@ export function isSupportedFileType(filename: string): boolean {
     return isSupportedFile.test(filename);
 }
 
-export async function processFile(filename: string, root: string, target: string): Promise<ProcessFileResult[]> {
+export interface ProcessFileOptions {
+    root: string;
+    target: string;
+    allowJsOutsideOfRoot?: boolean;
+}
+
+export async function processFile(filename: string, options: ProcessFileOptions): Promise<ProcessFileResult[]> {
     const src = await readSourceFile(filename);
-    const r = processSourceFile(src, root, target);
+    const r = processSourceFile(src, options);
     if (!r.mappings) return [r];
 
     return [r, processSourceMap(r.mappings)];
@@ -91,10 +108,6 @@ function calcNewFilename(srcFilename: string, root: string, target: string): str
     const newName = srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1');
     return rebaseFile(newName, root, target);
 }
-
-export const __testing__ = {
-    calcNewFilename,
-};
 
 function processSourceMap(sourceMap: AdjustedSourceMap): ProcessFileResult {
     const pr: ProcessFileResult = {
@@ -140,8 +153,11 @@ function rebaseRelFileReference(importFile: string, currentFile: string, root: s
     return newImportFile;
 }
 
-function rebaseImport(importFile: string, currentFile: string, root: string, target: string): string {
-    const newImportFile = rebaseRelFileReference(importFile, currentFile, root, target).replace(/\.js$/, '.mjs');
+function calcRelativeImportFilename(importFile: string, currentFile: string, root: string, target: string): string {
+    const newImportFile = rebaseRelFileReference(importFile, currentFile, root, target);
+    if (doesContain(root, pathJoin(dirname(currentFile), importFile))) {
+        return newImportFile.replace(/\.js$/, '.mjs');
+    }
     return newImportFile;
 }
 
@@ -151,3 +167,8 @@ function normalizeImport(relativeImport: string): string {
     const relRef = ('./' + ref).replace('./../', '../');
     return relRef;
 }
+
+export const __testing__ = {
+    calcNewFilename,
+    calcRelativeImportFilename,
+};

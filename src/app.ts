@@ -51,6 +51,7 @@ interface CliOptions {
     color?: boolean;
     dryRun?: boolean;
     verbose?: boolean;
+    enforceRoot?: boolean;
 }
 
 export async function app(program = defaultCommand): Promise<Command> {
@@ -61,8 +62,9 @@ export async function app(program = defaultCommand): Promise<Command> {
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')
-        .option('--no-must-find-files', 'No error if files are not found.')
         .option('--dry-run', 'Dry Run do not update files.')
+        .option('--no-must-find-files', 'No error if files are not found.')
+        .option('--no-enforce-root', 'Do not fail if relative `.js` files outside of the root are imported.')
         .option('--color', 'Force color.')
         .option('--no-color', 'Do not use color.')
         .option('-v, --verbose', 'Verbose mode')
@@ -89,6 +91,7 @@ export async function app(program = defaultCommand): Promise<Command> {
                 output: optionsCli.output,
                 progress: logger,
                 root: optionsCli.root,
+                allowJsOutsideOfRoot: !(optionsCli.enforceRoot ?? true),
             };
             await processFiles(files, processOptions);
             logger(chalk.green('done.'));
