@@ -6,7 +6,6 @@ Arguments:
   files                 The files to rename.
 
 Options:
-  -k, --keep            Keep the original files.
   -o, --output <dir>    The output directory.
   --cwd <dir>           The current working directory.
   --root <dir>          The root directory.

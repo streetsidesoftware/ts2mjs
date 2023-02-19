@@ -2,10 +2,12 @@
 
 Rename TypeScript created ESM .js files to .mjs
 
-This tool takes output from `tsc` and renames the files.
+This tool takes output from `tsc` and copies/renames the files.
 
 - `file.js` => `file.mjs`
+- `file.js.map` => `file.mjs.map`
 - `file.d.ts` => `file.d.mts`
+- `file.d.ts.map` => `file.d.mts.map`
 
 **`dist/code.js` -> `dist/code.mjs`**
 
@@ -99,7 +101,6 @@ Arguments:
   files                 The files to rename.
 
 Options:
-  -k, --keep            Keep the original files.
   -o, --output <dir>    The output directory.
   --cwd <dir>           The current working directory.
   --root <dir>          The root directory.
