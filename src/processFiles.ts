@@ -75,6 +75,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     }
 
     async function cp(src: string, dst: string) {
+        if (src === dst) return;
         if (dryRun) return;
         // Copy will not overwrite a file that has already been written.
         if (filesWritten.has(dst)) return;

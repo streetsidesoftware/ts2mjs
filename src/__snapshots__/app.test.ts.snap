@@ -170,41 +170,6 @@ exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `
 "
 `;
 
-exports[`app > run (actual) (errors and warnings) [ '.', …(1) ] 1`] = `
-"Console Output:
-[log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
-[log]: fixtures/sample/lib/database/fetch.js.map - copy
-[log]: fixtures/sample/lib/database/index.d.ts.map - copy
-[log]: fixtures/sample/lib/database/index.js.map - copy
-[warn]: 
-[error]: Error: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)
-[stdout]: 
-[stderr]: 
-"
-`;
-
-exports[`app > run (actual) (errors and warnings) [ '.', …(2) ] 1`] = `
-"Console Output:
-[log]: done.
-[log]: fixtures/sample/lib/database/fetch.d.ts -> temp/fetch.d.mts Generated
-[log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
-[log]: fixtures/sample/lib/database/fetch.d.ts.map -> temp/fetch.d.mts.map Generated
-[log]: fixtures/sample/lib/database/fetch.js -> temp/fetch.mjs Generated
-[log]: fixtures/sample/lib/database/fetch.js.map - copy
-[log]: fixtures/sample/lib/database/fetch.js.map -> temp/fetch.mjs.map Generated
-[log]: fixtures/sample/lib/database/index.d.ts -> temp/index.d.mts Generated
-[log]: fixtures/sample/lib/database/index.d.ts.map - copy
-[log]: fixtures/sample/lib/database/index.d.ts.map -> temp/index.d.mts.map Generated
-[log]: fixtures/sample/lib/database/index.js -> temp/index.mjs Generated
-[log]: fixtures/sample/lib/database/index.js.map - copy
-[log]: fixtures/sample/lib/database/index.js.map -> temp/index.mjs.map Generated
-[warn]: 
-[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)
-[stdout]: 
-[stderr]: 
-"
-`;
-
 exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
 "Console Output:
 [log]: done.

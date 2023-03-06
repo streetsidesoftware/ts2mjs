@@ -30,7 +30,20 @@ describe('processFile', () => {
         const src = await readSourceFile(file);
         const result = processSourceFile(src, { root, target, warning: vi.fn() });
         expect(result).toEqual(resolvedExpected);
-        expect(result.content).toMatchSnapshot();
+        expect(result?.content).toMatchSnapshot();
+    });
+
+    test.each`
+        file                    | root        | target      | expected
+        ${'sample/out/app.mjs'} | ${'sample'} | ${'sample'} | ${undefined}
+    `('processFile skip $file', async ({ file, root, target, expected }) => {
+        file = ff(file);
+        root = ff(root);
+        target = ff(target);
+
+        const src = await readSourceFile(file);
+        const result = processSourceFile(src, { root, target, warning: vi.fn() });
+        expect(result).toEqual(expected);
     });
 
     test.each`
@@ -52,7 +65,7 @@ describe('processFile', () => {
         const warning = vi.fn();
         const result = processSourceFile(src, { root, target, allowJsOutsideOfRoot: true, warning });
         expect(result).toEqual(resolvedExpected);
-        expect(result.content).toMatchSnapshot();
+        expect(result?.content).toMatchSnapshot();
         expect(warning).toHaveBeenCalledWith(sc('Import of a file outside of the root'));
     });
 

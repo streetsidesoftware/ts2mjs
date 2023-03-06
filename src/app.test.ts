@@ -49,16 +49,16 @@ describe('app', () => {
     });
 
     test.each`
-        args
-        ${['.', '--root=fixtures/sample/lib/database']}
-        ${['.', '--root=fixtures/sample/lib/database', '--no-enforce-root']}
-    `('run (actual) (errors and warnings) $args', async ({ args }) => {
+        args                                                                 | expected
+        ${['.', '--root=fixtures/sample/lib/database']}                      | ${sc('[error]: Error: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        ${['.', '--root=fixtures/sample/lib/database', '--no-enforce-root']} | ${sc('[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+    `('run (actual) (errors and warnings) $args', async ({ args, expected }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
         const argv = genArgv([...args, `--output=${tempDir}`], { dryRun: false });
         const context = createRunContext();
         await expect(run(argv, context)).resolves.toBeUndefined();
         const output = context.output({ sort: true, replacements: [tempDir, 'temp'] });
-        expect(output).toMatchSnapshot();
+        expect(output).toEqual(expected);
     });
 
     test.each`
