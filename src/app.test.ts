@@ -64,6 +64,7 @@ describe('app', () => {
     test.each`
         args
         ${'--help'}
+        ${'_not_found_'}
     `('run error $args', async ({ args }) => {
         const argv = genArgv(args);
         const context = createRunContext();
