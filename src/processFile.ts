@@ -27,12 +27,18 @@ export interface ProcessSourceFileResult extends ProcessFileResult {
     mappings: AdjustedSourceMap | undefined;
 }
 
-export function processSourceFile(src: SourceFile, options: ProcessFileOptions): ProcessSourceFileResult {
+export function processSourceFile(src: SourceFile, options: ProcessFileOptions): ProcessSourceFileResult | undefined {
     const { srcFilename, content, map: mappings } = src;
     const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot } = options;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
     assert(isSupportedFile.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
+
+    const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
+    if (pathJoin(targetRoot, filename) === pathJoin(srcRoot, srcFilename)) {
+        // Do not process files in place.
+        return undefined;
+    }
 
     const exp = new RegExp(regExpImportExport);
 
@@ -67,8 +73,6 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
         }
     }
 
-    const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
-
     const sourceMap = remapSourceMap(mappings, magicString, srcFilename, filename);
 
     if (!linesChanged)
@@ -102,6 +106,7 @@ export interface ProcessFileOptions {
 export async function processFile(filename: string, options: ProcessFileOptions): Promise<ProcessFileResult[]> {
     const src = await readSourceFile(filename);
     const r = processSourceFile(src, options);
+    if (!r) return [];
     if (!r.mappings) return [r];
 
     return [r, processSourceMap(r.mappings)];
