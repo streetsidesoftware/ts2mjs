@@ -19,5 +19,6 @@ runs:
         cache: 'pnpm'
 
     - name: Install
-      run: pnpm i
+      # `--no-frozen-lockfile` is used to work around Dependabot issue that doesn't update the lock.
+      run: pnpm i --no-frozen-lockfile
       shell: bash

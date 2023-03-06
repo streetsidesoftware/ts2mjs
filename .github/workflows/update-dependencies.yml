@@ -1,0 +1,55 @@
+name: ' 🔗 Update Dependencies Main'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/package.json'
+      - '**/yarn.lock'
+      - 'scripts/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  update-dependencies:
+    if: github.repository_owner == 'streetsidesoftware'
+    runs-on: ubuntu-latest
+    env:
+      NEW_BRANCH: 'update-dependencies-main'
+      REF_BRANCH: main
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.REF_BRANCH }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Update
+        run: |
+          pnpm upgrade
+
+      - name: Install
+        run: |
+          pnpm i --no-frozen-lockfile
+
+      - name: Gen Body
+        run: |
+          echo 'git_body<<DIFF' >> $GITHUB_ENV
+          git --no-pager diff --compact-summary >> $GITHUB_ENV
+          echo 'DIFF' >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        uses: ./.github/actions/pr
+        with:
+          commit-message: 'ci: Workflow Bot -- Update ALL Dependencies'
+          branch: ${{ env.NEW_BRANCH }}
+          base: ${{ env.REF_BRANCH }}
+          title: 'ci: Workflow Bot -- Update ALL Dependencies (${{ env.REF_BRANCH }})'
+          body: ${{ env.git_body }}
