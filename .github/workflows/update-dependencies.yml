@@ -66,3 +66,5 @@ jobs:
           base: ${{ env.REF_BRANCH }}
           title: 'ci: Workflow Bot -- Update ALL Dependencies (${{ env.REF_BRANCH }})'
           body: ${{ steps.body.outputs.value }}
+          app_id: ${{ secrets.AUTOMATION_APP_ID }}
+          app_private_key: ${{ secrets.AUTOMATION_PRIVATE_KEY }}
