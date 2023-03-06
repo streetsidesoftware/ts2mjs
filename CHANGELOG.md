@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.1...v1.1.2) (2023-03-06)
+
+
+### Bug Fixes
+
+* Skip files where the src and target are the same ([#13](https://github.com/streetsidesoftware/ts2mjs/issues/13)) ([1f3ccca](https://github.com/streetsidesoftware/ts2mjs/commit/1f3ccca067e550df5601fc5821ffb1de25251e2f))
+
 ## [1.1.1](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.0...v1.1.1) (2023-02-19)
 
 
