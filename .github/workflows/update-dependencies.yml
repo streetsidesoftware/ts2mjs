@@ -39,11 +39,28 @@ jobs:
         run: |
           pnpm i --no-frozen-lockfile
 
-      - name: Gen Body
+      - name: Git Summary
         run: |
-          echo 'git_body<<DIFF' >> $GITHUB_ENV
+          echo 'git_summary<<DIFF' >> $GITHUB_ENV
           git --no-pager diff --compact-summary >> $GITHUB_ENV
           echo 'DIFF' >> $GITHUB_ENV
+
+      - name: Gen Body
+        id: body
+        uses: ./.github/actions/output
+        with:
+          value: |
+            ## Update Dependencies
+
+            ```
+            ${{ env.git_summary }}
+            ```
+
+      - name: Show Body
+        env:
+          BODY: ${{ steps.body.outputs.value }}
+        run: |
+          echo "$BODY"
 
       - name: Create Pull Request
         uses: ./.github/actions/pr
@@ -52,4 +69,4 @@ jobs:
           branch: ${{ env.NEW_BRANCH }}
           base: ${{ env.REF_BRANCH }}
           title: 'ci: Workflow Bot -- Update ALL Dependencies (${{ env.REF_BRANCH }})'
-          body: ${{ env.git_body }}
+          body: ${{ steps.body.outputs.value }}
