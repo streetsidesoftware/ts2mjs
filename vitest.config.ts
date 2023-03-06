@@ -5,7 +5,7 @@ export default defineConfig({
         reporters: 'verbose',
         coverage: {
             // enabled: true,
-            // provider: 'istanbul',
+            provider: 'istanbul',
             clean: true,
             all: false,
             reporter: ['html', 'text', 'lcov', 'json'],

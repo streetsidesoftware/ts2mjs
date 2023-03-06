@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ReadSourceFile > readSourceFile 'sample/lib/index.js' 1`] = `"{\\"version\\":3,\\"file\\":\\"index.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"../src/index.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAaA,OAAO,EAAE,YAAY,EAAE,MAAM,aAAa,CAAC;AAE3C,OAAO,EAAE,WAAW,EAAE,MAAM,qBAAqB,CAAC\\"}"`;
 

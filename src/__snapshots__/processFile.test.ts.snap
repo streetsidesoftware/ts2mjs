@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`processFile > processFile 'sample/lib/index.d.ts' 1`] = `
 "export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.mjs';
