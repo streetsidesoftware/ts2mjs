@@ -1,97 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`app > run (--dry-run) [ '.', …(2) ] 1`] = `
-"Console Output:
-[log]: done.
-[log]: fixtures/sample/lib/app.d.ts -> temp/app.d.mts Generated
-[log]: fixtures/sample/lib/app.d.ts.map - copy
-[log]: fixtures/sample/lib/app.d.ts.map -> temp/app.d.mts.map Generated
-[log]: fixtures/sample/lib/app.js -> temp/app.mjs Generated
-[log]: fixtures/sample/lib/app.js.map - copy
-[log]: fixtures/sample/lib/app.js.map -> temp/app.mjs.map Generated
-[log]: fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Generated
-[log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
-[log]: fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Generated
-[log]: fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Generated
-[log]: fixtures/sample/lib/database/fetch.js.map - copy
-[log]: fixtures/sample/lib/database/fetch.js.map -> temp/database/fetch.mjs.map Generated
-[log]: fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Generated
-[log]: fixtures/sample/lib/database/index.d.ts.map - copy
-[log]: fixtures/sample/lib/database/index.d.ts.map -> temp/database/index.d.mts.map Generated
-[log]: fixtures/sample/lib/database/index.js -> temp/database/index.mjs Generated
-[log]: fixtures/sample/lib/database/index.js.map - copy
-[log]: fixtures/sample/lib/database/index.js.map -> temp/database/index.mjs.map Generated
-[log]: fixtures/sample/lib/index.d.ts -> temp/index.d.mts Generated
-[log]: fixtures/sample/lib/index.d.ts.map - copy
-[log]: fixtures/sample/lib/index.d.ts.map -> temp/index.d.mts.map Generated
-[log]: fixtures/sample/lib/index.js -> temp/index.mjs Generated
-[log]: fixtures/sample/lib/index.js.map - copy
-[log]: fixtures/sample/lib/index.js.map -> temp/index.mjs.map Generated
-[log]: fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Generated
-[log]: fixtures/sample/lib/lookup.d.ts.map - copy
-[log]: fixtures/sample/lib/lookup.d.ts.map -> temp/lookup.d.mts.map Generated
-[log]: fixtures/sample/lib/lookup.js -> temp/lookup.mjs Generated
-[log]: fixtures/sample/lib/lookup.js.map - copy
-[log]: fixtures/sample/lib/lookup.js.map -> temp/lookup.mjs.map Generated
-[log]: fixtures/sample/lib/types.d.ts -> temp/types.d.mts Generated
-[log]: fixtures/sample/lib/types.d.ts.map - copy
-[log]: fixtures/sample/lib/types.d.ts.map -> temp/types.d.mts.map Generated
-[log]: fixtures/sample/lib/types.js -> temp/types.mjs Generated
-[log]: fixtures/sample/lib/types.js.map - copy
-[log]: fixtures/sample/lib/types.js.map -> temp/types.mjs.map Generated
-[warn]: 
-[error]: 
-[stdout]: 
-[stderr]: 
-"
-`;
-
-exports[`app > run (--dry-run) [ '.', …(2) ] 2`] = `
-"Console Output:
-[log]: app.d.ts -> ../../../temp/fixtures/sample/lib/app.d.mts Generated
-[log]: app.d.ts.map - copy
-[log]: app.d.ts.map -> ../../../temp/fixtures/sample/lib/app.d.mts.map Generated
-[log]: app.js -> ../../../temp/fixtures/sample/lib/app.mjs Generated
-[log]: app.js.map - copy
-[log]: app.js.map -> ../../../temp/fixtures/sample/lib/app.mjs.map Generated
-[log]: database/fetch.d.ts -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts Generated
-[log]: database/fetch.d.ts.map - copy
-[log]: database/fetch.d.ts.map -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts.map Generated
-[log]: database/fetch.js -> ../../../temp/fixtures/sample/lib/database/fetch.mjs Generated
-[log]: database/fetch.js.map - copy
-[log]: database/fetch.js.map -> ../../../temp/fixtures/sample/lib/database/fetch.mjs.map Generated
-[log]: database/index.d.ts -> ../../../temp/fixtures/sample/lib/database/index.d.mts Generated
-[log]: database/index.d.ts.map - copy
-[log]: database/index.d.ts.map -> ../../../temp/fixtures/sample/lib/database/index.d.mts.map Generated
-[log]: database/index.js -> ../../../temp/fixtures/sample/lib/database/index.mjs Generated
-[log]: database/index.js.map - copy
-[log]: database/index.js.map -> ../../../temp/fixtures/sample/lib/database/index.mjs.map Generated
-[log]: done.
-[log]: index.d.ts -> ../../../temp/fixtures/sample/lib/index.d.mts Generated
-[log]: index.d.ts.map - copy
-[log]: index.d.ts.map -> ../../../temp/fixtures/sample/lib/index.d.mts.map Generated
-[log]: index.js -> ../../../temp/fixtures/sample/lib/index.mjs Generated
-[log]: index.js.map - copy
-[log]: index.js.map -> ../../../temp/fixtures/sample/lib/index.mjs.map Generated
-[log]: lookup.d.ts -> ../../../temp/fixtures/sample/lib/lookup.d.mts Generated
-[log]: lookup.d.ts.map - copy
-[log]: lookup.d.ts.map -> ../../../temp/fixtures/sample/lib/lookup.d.mts.map Generated
-[log]: lookup.js -> ../../../temp/fixtures/sample/lib/lookup.mjs Generated
-[log]: lookup.js.map - copy
-[log]: lookup.js.map -> ../../../temp/fixtures/sample/lib/lookup.mjs.map Generated
-[log]: types.d.ts -> ../../../temp/fixtures/sample/lib/types.d.mts Generated
-[log]: types.d.ts.map - copy
-[log]: types.d.ts.map -> ../../../temp/fixtures/sample/lib/types.d.mts.map Generated
-[log]: types.js -> ../../../temp/fixtures/sample/lib/types.mjs Generated
-[log]: types.js.map - copy
-[log]: types.js.map -> ../../../temp/fixtures/sample/lib/types.mjs.map Generated
-[warn]: 
-[error]: 
-[stdout]: 
-[stderr]: 
-"
-`;
-
 exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 "Console Output:
 [log]: done.
@@ -163,6 +71,98 @@ exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 2`] = `
 exports[`app > run (--dry-run) [ 'not_found', '--no-must-find-files' ] 1`] = `
 "Console Output:
 [log]: done.
+[warn]: 
+[error]: 
+[stdout]: 
+[stderr]: 
+"
+`;
+
+exports[`app > run (--dry-run) [ Array(3) ] 1`] = `
+"Console Output:
+[log]: done.
+[log]: fixtures/sample/lib/app.d.ts -> temp/app.d.mts Generated
+[log]: fixtures/sample/lib/app.d.ts.map - copy
+[log]: fixtures/sample/lib/app.d.ts.map -> temp/app.d.mts.map Generated
+[log]: fixtures/sample/lib/app.js -> temp/app.mjs Generated
+[log]: fixtures/sample/lib/app.js.map - copy
+[log]: fixtures/sample/lib/app.js.map -> temp/app.mjs.map Generated
+[log]: fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Generated
+[log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
+[log]: fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Generated
+[log]: fixtures/sample/lib/database/fetch.js -> temp/database/fetch.mjs Generated
+[log]: fixtures/sample/lib/database/fetch.js.map - copy
+[log]: fixtures/sample/lib/database/fetch.js.map -> temp/database/fetch.mjs.map Generated
+[log]: fixtures/sample/lib/database/index.d.ts -> temp/database/index.d.mts Generated
+[log]: fixtures/sample/lib/database/index.d.ts.map - copy
+[log]: fixtures/sample/lib/database/index.d.ts.map -> temp/database/index.d.mts.map Generated
+[log]: fixtures/sample/lib/database/index.js -> temp/database/index.mjs Generated
+[log]: fixtures/sample/lib/database/index.js.map - copy
+[log]: fixtures/sample/lib/database/index.js.map -> temp/database/index.mjs.map Generated
+[log]: fixtures/sample/lib/index.d.ts -> temp/index.d.mts Generated
+[log]: fixtures/sample/lib/index.d.ts.map - copy
+[log]: fixtures/sample/lib/index.d.ts.map -> temp/index.d.mts.map Generated
+[log]: fixtures/sample/lib/index.js -> temp/index.mjs Generated
+[log]: fixtures/sample/lib/index.js.map - copy
+[log]: fixtures/sample/lib/index.js.map -> temp/index.mjs.map Generated
+[log]: fixtures/sample/lib/lookup.d.ts -> temp/lookup.d.mts Generated
+[log]: fixtures/sample/lib/lookup.d.ts.map - copy
+[log]: fixtures/sample/lib/lookup.d.ts.map -> temp/lookup.d.mts.map Generated
+[log]: fixtures/sample/lib/lookup.js -> temp/lookup.mjs Generated
+[log]: fixtures/sample/lib/lookup.js.map - copy
+[log]: fixtures/sample/lib/lookup.js.map -> temp/lookup.mjs.map Generated
+[log]: fixtures/sample/lib/types.d.ts -> temp/types.d.mts Generated
+[log]: fixtures/sample/lib/types.d.ts.map - copy
+[log]: fixtures/sample/lib/types.d.ts.map -> temp/types.d.mts.map Generated
+[log]: fixtures/sample/lib/types.js -> temp/types.mjs Generated
+[log]: fixtures/sample/lib/types.js.map - copy
+[log]: fixtures/sample/lib/types.js.map -> temp/types.mjs.map Generated
+[warn]: 
+[error]: 
+[stdout]: 
+[stderr]: 
+"
+`;
+
+exports[`app > run (--dry-run) [ Array(3) ] 2`] = `
+"Console Output:
+[log]: app.d.ts -> ../../../temp/fixtures/sample/lib/app.d.mts Generated
+[log]: app.d.ts.map - copy
+[log]: app.d.ts.map -> ../../../temp/fixtures/sample/lib/app.d.mts.map Generated
+[log]: app.js -> ../../../temp/fixtures/sample/lib/app.mjs Generated
+[log]: app.js.map - copy
+[log]: app.js.map -> ../../../temp/fixtures/sample/lib/app.mjs.map Generated
+[log]: database/fetch.d.ts -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts Generated
+[log]: database/fetch.d.ts.map - copy
+[log]: database/fetch.d.ts.map -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts.map Generated
+[log]: database/fetch.js -> ../../../temp/fixtures/sample/lib/database/fetch.mjs Generated
+[log]: database/fetch.js.map - copy
+[log]: database/fetch.js.map -> ../../../temp/fixtures/sample/lib/database/fetch.mjs.map Generated
+[log]: database/index.d.ts -> ../../../temp/fixtures/sample/lib/database/index.d.mts Generated
+[log]: database/index.d.ts.map - copy
+[log]: database/index.d.ts.map -> ../../../temp/fixtures/sample/lib/database/index.d.mts.map Generated
+[log]: database/index.js -> ../../../temp/fixtures/sample/lib/database/index.mjs Generated
+[log]: database/index.js.map - copy
+[log]: database/index.js.map -> ../../../temp/fixtures/sample/lib/database/index.mjs.map Generated
+[log]: done.
+[log]: index.d.ts -> ../../../temp/fixtures/sample/lib/index.d.mts Generated
+[log]: index.d.ts.map - copy
+[log]: index.d.ts.map -> ../../../temp/fixtures/sample/lib/index.d.mts.map Generated
+[log]: index.js -> ../../../temp/fixtures/sample/lib/index.mjs Generated
+[log]: index.js.map - copy
+[log]: index.js.map -> ../../../temp/fixtures/sample/lib/index.mjs.map Generated
+[log]: lookup.d.ts -> ../../../temp/fixtures/sample/lib/lookup.d.mts Generated
+[log]: lookup.d.ts.map - copy
+[log]: lookup.d.ts.map -> ../../../temp/fixtures/sample/lib/lookup.d.mts.map Generated
+[log]: lookup.js -> ../../../temp/fixtures/sample/lib/lookup.mjs Generated
+[log]: lookup.js.map - copy
+[log]: lookup.js.map -> ../../../temp/fixtures/sample/lib/lookup.mjs.map Generated
+[log]: types.d.ts -> ../../../temp/fixtures/sample/lib/types.d.mts Generated
+[log]: types.d.ts.map - copy
+[log]: types.d.ts.map -> ../../../temp/fixtures/sample/lib/types.d.mts.map Generated
+[log]: types.js -> ../../../temp/fixtures/sample/lib/types.mjs Generated
+[log]: types.js.map - copy
+[log]: types.js.map -> ../../../temp/fixtures/sample/lib/types.mjs.map Generated
 [warn]: 
 [error]: 
 [stdout]: 

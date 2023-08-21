@@ -79,7 +79,7 @@ describe('processFile', () => {
         const content = '';
         const target = ff('../temp/lib');
         expect(() =>
-            processSourceFile({ srcFilename: file, content }, { root, target, warning: vi.fn() })
+            processSourceFile({ srcFilename: file, content }, { root, target, warning: vi.fn() }),
         ).toThrowError(expected);
     });
 
@@ -115,8 +115,8 @@ describe('processFile', () => {
         'calcRelativeImportFilename $importFile $currentFile $root $target',
         ({ importFile, currentFile, root, target, expected }) => {
             expect(__testing__.calcRelativeImportFilename(importFile, ff(currentFile), ff(root), ff(target))).toEqual(
-                expected
+                expected,
             );
-        }
+        },
     );
 });

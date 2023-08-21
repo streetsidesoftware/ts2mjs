@@ -15,7 +15,7 @@ export async function findFiles(globs: string[], options: FindFileOptions) {
     };
     const files = await globby(
         globs.map((a) => a.trim()).filter((a) => !!a),
-        globOptions
+        globOptions,
     );
     // console.log('%o', files);
     return files;
