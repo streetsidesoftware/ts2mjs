@@ -58,7 +58,7 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
                     srcRoot,
-                    srcFilename
+                    srcFilename,
                 )})`;
                 if (!allowJsOutsideOfRoot) {
                     throw new UsageError(message);
@@ -132,7 +132,7 @@ function remapSourceMap(
     sourceMap: SourceMap | undefined,
     magicString: MagicString,
     fromSourceFilename: string,
-    toSourceFilename: string
+    toSourceFilename: string,
 ): AdjustedSourceMap | undefined {
     if (!sourceMap) return undefined;
 
