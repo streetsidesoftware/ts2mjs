@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.2...v2.0.0) (2023-08-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require Node 16+ ([#65](https://github.com/streetsidesoftware/ts2mjs/issues/65))
+
+### Bug Fixes
+
+* Require Node 16+ ([#65](https://github.com/streetsidesoftware/ts2mjs/issues/65)) ([201ce50](https://github.com/streetsidesoftware/ts2mjs/commit/201ce50ddf02b721fd7c1255b9f80ecc9171661f))
+
 ## [1.1.2](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.1...v1.1.2) (2023-03-06)
 
 
