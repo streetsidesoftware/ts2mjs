@@ -69,7 +69,7 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
         .name((await getName()) || 'ts2mjs')
         .description('Rename ESM .js files to .mjs (or .cjs if --cjs options is used)')
         .argument('<files...>', 'The files to rename.')
-        .option('--cjs', 'Files are renamed to .cjs.')
+        .option('--cjs', 'Use .cjs extension instead of .mjs extension.')
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const chalk_1 = __importDefault(require("chalk"));
-const lookup_js_1 = require("./lookup.js");
+const lookup_js_1 = require("./lookup.cjs");
 async function run() {
     const guid = 'GUID';
     const person = await (0, lookup_js_1.lookUpPerson)('GUID');
@@ -16,4 +16,4 @@ async function run() {
     console.log(`Found: ${person.name}`);
 }
 exports.run = run;
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=app.cjs.map

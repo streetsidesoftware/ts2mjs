@@ -61,7 +61,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
         cjs = false,
     } = options;
 
-    const ext = cjs ? 'cjs' : 'mjs';
+    const ext = cjs ? '.cjs' : '.mjs';
 
     const filesWritten = new Map<string, Promise<void>>();
 
