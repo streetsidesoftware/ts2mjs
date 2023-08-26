@@ -8,9 +8,12 @@ import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
 import { UsageError } from './errors.js';
 
-const isSupportedFile = /\.(m?js|d\.m?ts)$/;
+const isSupportedFileMJS = /\.(m?js|d\.m?ts)$/;
+const isSupportedFileCJS = /\.(c?js|d\.c?ts)$/;
 
 const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
+
+type ExtensionType = 'cjs' | 'mjs';
 
 export interface ProcessFileResult {
     filename: string;
@@ -29,12 +32,16 @@ export interface ProcessSourceFileResult extends ProcessFileResult {
 
 export function processSourceFile(src: SourceFile, options: ProcessFileOptions): ProcessSourceFileResult | undefined {
     const { srcFilename, content, map: mappings } = src;
-    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot } = options;
+    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
-    assert(isSupportedFile.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
+    if (options.ext === 'cjs') {
+        assert(isSupportedFileCJS.test(srcFilename), 'Must be a supported file type (.js, .cjs, .d.ts, .d.cts).');
+    } else {
+        assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
+    }
 
-    const filename = calcNewFilename(srcFilename, srcRoot, targetRoot);
+    const filename = calcNewFilename(srcFilename, srcRoot, targetRoot, ext);
     if (pathJoin(targetRoot, filename) === pathJoin(srcRoot, srcFilename)) {
         // Do not process files in place.
         return undefined;
@@ -92,13 +99,14 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
     };
 }
 
-export function isSupportedFileType(filename: string): boolean {
-    return isSupportedFile.test(filename);
+export function isSupportedFileType(filename: string, ext: ExtensionType): boolean {
+    return (ext === 'mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
 }
 
 export interface ProcessFileOptions {
     root: string;
     target: string;
+    ext: ExtensionType;
     allowJsOutsideOfRoot?: boolean;
     warning: (msg: string) => void;
 }
@@ -112,8 +120,11 @@ export async function processFile(filename: string, options: ProcessFileOptions)
     return [r, processSourceMap(r.mappings)];
 }
 
-function calcNewFilename(srcFilename: string, root: string, target: string): string {
-    const newName = srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1');
+function calcNewFilename(srcFilename: string, root: string, target: string, ext: ExtensionType): string {
+    const newName =
+        ext === 'mjs'
+            ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1')
+            : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.ts(.map)?$/, '.cts$1');
     return rebaseFile(newName, root, target);
 }
 

@@ -53,6 +53,7 @@ interface CliOptions {
     dryRun?: boolean;
     verbose?: boolean;
     enforceRoot?: boolean;
+    cjs?: boolean;
 }
 
 export interface AppLogger {
@@ -66,8 +67,9 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
 
     program
         .name((await getName()) || 'ts2mjs')
-        .description('Rename ESM .js files to .mjs')
+        .description('Rename ESM .js files to .mjs (or .cjs if --cjs options is used)')
         .argument('<files...>', 'The files to rename.')
+        .option('--cjs', 'Files are renamed to .cjs.')
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')
@@ -101,6 +103,7 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
                 cwd: optionsCli.cwd,
                 dryRun: optionsCli.dryRun || false,
                 output: optionsCli.output,
+                cjs: optionsCli.cjs,
                 progress: log,
                 warning,
                 root: optionsCli.root,

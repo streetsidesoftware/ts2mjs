@@ -38,6 +38,10 @@ export interface Options {
      * The root directory, files outside of the root will NOT be copied.
      */
     root: string | undefined;
+    /**
+     * Rename files to `.cjs` instead of `.mjs`.
+     */
+    cjs: boolean | undefined;
 }
 
 export interface ProcessFilesResult {
@@ -54,7 +58,10 @@ export async function processFiles(files: string[], options: Options): Promise<P
         progress: logProgress,
         allowJsOutsideOfRoot = false,
         warning = console.warn,
+        cjs = false,
     } = options;
+
+    const ext = cjs ? 'cjs' : 'mjs';
 
     const filesWritten = new Map<string, Promise<void>>();
 
@@ -107,7 +114,13 @@ export async function processFiles(files: string[], options: Options): Promise<P
 
     async function handleFile(filename: string) {
         const src = path.resolve(fromDir, filename);
-        const filesToWrite = await processFile(src, { root: fromDir, target: toDir, allowJsOutsideOfRoot, warning });
+        const filesToWrite = await processFile(src, {
+            root: fromDir,
+            target: toDir,
+            ext,
+            allowJsOutsideOfRoot,
+            warning,
+        });
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
             logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);
@@ -122,7 +135,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (!isSupportedFileType(filename)) continue;
+        if (!isSupportedFileType(filename, ext)) continue;
         pending.push(handleFile(filename));
     }
 
@@ -130,7 +143,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (isSupportedFileType(filename)) continue;
+        if (isSupportedFileType(filename, ext)) continue;
         pending.push(copyFile(filename));
     }
 
