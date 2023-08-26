@@ -7,10 +7,23 @@ export { fetchEntity } from './database/index.mjs';
 //# sourceMappingURL=index.d.mts.map"
 `;
 
+exports[`processFile > processFile 'sample/lib/index.d.ts' 2`] = `
+"export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.mjs';
+export { lookUpPerson } from './lookup.mjs';
+export { fetchEntity } from './database/index.mjs';
+//# sourceMappingURL=index.d.cts.map"
+`;
+
 exports[`processFile > processFile 'sample/lib/index.js' 1`] = `
 "export { lookUpPerson } from './lookup.mjs';
 export { fetchEntity } from './database/index.mjs';
 //# sourceMappingURL=index.mjs.map"
+`;
+
+exports[`processFile > processFile 'sample/lib/index.js' 2`] = `
+"export { lookUpPerson } from './lookup.mjs';
+export { fetchEntity } from './database/index.mjs';
+//# sourceMappingURL=index.cjs.map"
 `;
 
 exports[`processFile > processFile allowJsOutsideOfRoot 'sample/lib/database/fetch.d.ts' 1`] = `
