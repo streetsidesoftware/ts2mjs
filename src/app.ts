@@ -89,7 +89,8 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
                 chalk.level = optionsCli.color ? 3 : 0;
             }
             const cwd = optionsCli.cwd || process.cwd();
-            const files = (await findFiles(globs, { cwd })).map((file) => path.resolve(cwd, file));
+            const exclude = optionsCli.exclude;
+            const files = (await findFiles(globs, { cwd, exclude })).map((file) => path.resolve(cwd, file));
             if (!files.length && optionsCli.mustFindFiles) {
                 program.error('No files found.');
             }
