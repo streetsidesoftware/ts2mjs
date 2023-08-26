@@ -129,7 +129,7 @@ function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, m
             const start = index + line.lastIndexOf(reference);
             const end = start + reference.length;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
-                const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
+                const message = `Import of a file outside of the root. Require: (${reference}) Source: (${relative(
                     srcRoot,
                     srcFilename,
                 )})`;

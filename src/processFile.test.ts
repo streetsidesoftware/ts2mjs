@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { UsageError } from './errors.js';
 
-import { processSourceFile, __testing__ } from './processFile.js';
+import { processSourceFile, __testing__, isSupportedFileType } from './processFile.js';
 import { readSourceFile } from './readSourceFile.js';
 import { resolveFixture, resolverTemp } from './test.util.js';
 
@@ -50,9 +50,11 @@ describe('processFile', () => {
     });
 
     test.each`
-        file                                | root                     | target      | expected
-        ${'sample/lib/database/fetch.d.ts'} | ${'sample/lib/database'} | ${'target'} | ${{ filename: 'target/fetch.d.mts', linesChanged: 1, content: sc("/../fixtures/sample/lib/types.js';") }}
-    `('processFile allowJsOutsideOfRoot $file', async ({ file, root, target, expected }) => {
+        file                                    | root                         | target      | ext       | expected
+        ${'sample/lib/database/fetch.d.ts'}     | ${'sample/lib/database'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/fetch.d.mts', linesChanged: 1, content: sc("/../fixtures/sample/lib/types.js';") }}
+        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.d.cts', linesChanged: 1, content: sc("/../fixtures/sample/lib-cjs/types.js';") }}
+        ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.cjs', linesChanged: 1, content: sc('../fixtures/sample/lib-cjs/constants.js");') }}
+    `('processFile allowJsOutsideOfRoot $file', async ({ file, root, target, ext, expected }) => {
         const resolveTemp = resolverTemp();
         file = ff(file);
         root = ff(root);
@@ -66,7 +68,7 @@ describe('processFile', () => {
 
         const src = await readSourceFile(file);
         const warning = vi.fn();
-        const result = processSourceFile(src, { root, target, ext: '.mjs', allowJsOutsideOfRoot: true, warning });
+        const result = processSourceFile(src, { root, target, ext, allowJsOutsideOfRoot: true, warning });
         expect(result).toEqual(resolvedExpected);
         expect(result?.content).toMatchSnapshot();
         expect(warning).toHaveBeenCalledWith(sc('Import of a file outside of the root'));
@@ -88,14 +90,16 @@ describe('processFile', () => {
     });
 
     test.each`
-        file                                | root                     | expected
-        ${'sample/lib/database/fetch.d.ts'} | ${'sample/lib/database'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
-    `('processFile error $file', async ({ file, root, expected }) => {
+        file                                    | root                         | ext       | expected
+        ${'sample/lib/database/fetch.d.ts'}     | ${'sample/lib/database'}     | ${'.mjs'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Require: (../constants.js) Source: (fetch.js)')}
+    `('processFile error $file', async ({ file, root, ext, expected }) => {
         root = ff(root);
         file = ff(file);
         const source = await readSourceFile(file);
         const target = ff('../temp/lib');
-        expect(() => processSourceFile(source, { root, target, ext: '.mjs', warning: vi.fn() })).toThrowError(expected);
+        expect(() => processSourceFile(source, { root, target, ext, warning: vi.fn() })).toThrowError(expected);
     });
 
     test.each`
@@ -127,4 +131,20 @@ describe('processFile', () => {
             ).toEqual(expected);
         },
     );
+
+    test.each`
+        filename       | ext       | expected
+        ${'code.ts'}   | ${'.mjs'} | ${false}
+        ${'code.d.ts'} | ${'.mjs'} | ${true}
+        ${'code.js'}   | ${'.mjs'} | ${true}
+        ${'code.mjs'}  | ${'.mjs'} | ${true}
+        ${'code.cjs'}  | ${'.mjs'} | ${false}
+        ${'code.ts'}   | ${'.cjs'} | ${false}
+        ${'code.d.ts'} | ${'.cjs'} | ${true}
+        ${'code.js'}   | ${'.cjs'} | ${true}
+        ${'code.mjs'}  | ${'.cjs'} | ${false}
+        ${'code.cjs'}  | ${'.cjs'} | ${true}
+    `('isSupportedFileType $filename `$ext`', ({ filename, ext, expected }) => {
+        expect(isSupportedFileType(filename, ext)).toBe(expected);
+    });
 });

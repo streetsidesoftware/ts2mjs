@@ -1,1 +1,1 @@
-{"version":3,"file":"fetch.js","sourceRoot":"","sources":["../../src/database/fetch.ts"],"names":[],"mappings":";;;AAEO,KAAK,UAAU,WAAW,CAAmB,IAAU;IAC1D,OAAO,CAAC,GAAG,CAAC,gBAAgB,IAAI,EAAE,CAAC,CAAC;IACpC,OAAO,SAAS,CAAC;AACrB,CAAC;AAHD,kCAGC"}
+{"version":3,"file":"fetch.js","sourceRoot":"","sources":["../../src/database/fetch.ts"],"names":[],"mappings":";;;AAAA,kDAA+C;AAGxC,KAAK,UAAU,WAAW,CAAC,IAAU;IACxC,OAAO,CAAC,GAAG,CAAC,gBAAgB,IAAI,EAAE,CAAC,CAAC;IACpC,OAAO,EAAE,GAAG,2BAAY,EAAE,IAAI,EAAE,CAAC;AACrC,CAAC;AAHD,kCAGC"}

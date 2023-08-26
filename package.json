@@ -20,7 +20,9 @@
   "scripts": {
     "build": "tsc -p .",
     "build:all": "pnpm build && pnpm build:fixtures && pnpm build:readme",
-    "build:fixtures": "tsc -p fixtures/sample && ./bin.mjs . --root fixtures/sample/lib --output fixtures/sample/out ",
+    "build:fixtures": "pnpm build:fixtures:esm && pnpm build:fixtures:cjs",
+    "build:fixtures:esm": "shx rm -rf fixtures/sample/out fixtures/sample/lib && tsc -p fixtures/sample && ./bin.mjs . --root fixtures/sample/lib --output fixtures/sample/out ",
+    "build:fixtures:cjs": "shx rm -rf fixtures/sample/lib-cjs &&tsc -p fixtures/sample/tsconfig.cjs.json && ./bin.mjs . --cjs --root fixtures/sample/lib-cjs",
     "build:readme": "pnpm build:readme:help && pnpm build:readme:inject && prettier -w README.md",
     "build:readme:help": "./bin.mjs --help > static/help.txt",
     "build:readme:inject": "inject-markdown README.md",

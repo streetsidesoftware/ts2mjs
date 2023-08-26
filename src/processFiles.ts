@@ -16,6 +16,10 @@ export interface Options {
      */
     cwd: string | undefined;
     /**
+     * Globs to exclude from processing.
+     */
+    exclude?: string[] | undefined;
+    /**
      * Dry Run, do not actually write files.
      */
     dryRun: boolean;
