@@ -54,6 +54,7 @@ interface CliOptions {
     verbose?: boolean;
     enforceRoot?: boolean;
     cjs?: boolean;
+    exclude: string[];
 }
 
 export interface AppLogger {
@@ -68,11 +69,12 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
     program
         .name((await getName()) || 'ts2mjs')
         .description('Rename ESM .js files to .mjs (or .cjs if --cjs options is used)')
-        .argument('<files...>', 'The files to rename.')
-        .option('--cjs', 'Files are renamed to .cjs.')
+        .argument('<files...>', 'Globs matching files to rename.')
+        .option('--cjs', 'Use .cjs extension instead of .mjs extension.')
         .option('-o, --output <dir>', 'The output directory.')
         .option('--cwd <dir>', 'The current working directory.')
         .option('--root <dir>', 'The root directory.')
+        .option('-x,--exclude <glob>', 'Exclude a glob from the files.', concat, [])
         .option('--dry-run', 'Dry Run do not update files.')
         .option('--no-must-find-files', 'No error if files are not found.')
         .option('--no-enforce-root', 'Do not fail if relative `.js` files outside of the root are imported.')
@@ -87,7 +89,8 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
                 chalk.level = optionsCli.color ? 3 : 0;
             }
             const cwd = optionsCli.cwd || process.cwd();
-            const files = (await findFiles(globs, { cwd })).map((file) => path.resolve(cwd, file));
+            const exclude = optionsCli.exclude;
+            const files = (await findFiles(globs, { cwd, exclude })).map((file) => path.resolve(cwd, file));
             if (!files.length && optionsCli.mustFindFiles) {
                 program.error('No files found.');
             }
@@ -104,6 +107,7 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
                 dryRun: optionsCli.dryRun || false,
                 output: optionsCli.output,
                 cjs: optionsCli.cjs,
+                exclude: optionsCli.exclude,
                 progress: log,
                 warning,
                 root: optionsCli.root,
@@ -130,4 +134,8 @@ export async function run(argv?: string[], program?: Command, logger?: AppLogger
         }
         throw e;
     }
+}
+
+function concat(value: string, prev: string[]): string[] {
+    return prev.concat(value);
 }

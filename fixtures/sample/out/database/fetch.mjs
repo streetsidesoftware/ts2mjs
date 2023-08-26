@@ -1,5 +1,6 @@
+import { sampleEntity } from '../constants.mjs';
 export async function fetchEntity(guid) {
     console.log(`Fetch Entity ${guid}`);
-    return undefined;
+    return { ...sampleEntity, guid };
 }
 //# sourceMappingURL=fetch.mjs.map

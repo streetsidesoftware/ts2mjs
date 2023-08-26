@@ -1,3 +1,3 @@
 import { Entity, GUID } from '../types.js';
-export declare function fetchEntity<T extends Entity>(guid: GUID): Promise<T | undefined>;
+export declare function fetchEntity(guid: GUID): Promise<Entity | undefined>;
 //# sourceMappingURL=fetch.d.ts.map

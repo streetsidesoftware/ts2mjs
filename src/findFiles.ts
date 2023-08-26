@@ -5,11 +5,14 @@ const excludes = ['node_modules'];
 export interface FindFileOptions {
     onlyFiles?: boolean | undefined;
     cwd?: string | undefined;
+    /** glob patterns of files to exclude. */
+    exclude?: string[] | undefined;
 }
 
 export async function findFiles(globs: string[], options: FindFileOptions) {
+    console.warn('options: %o', options);
     const globOptions: GlobbyOptions = {
-        ignore: excludes,
+        ignore: excludes.concat(options.exclude || []),
         onlyFiles: options.onlyFiles ?? true,
         cwd: options.cwd || process.cwd(),
     };

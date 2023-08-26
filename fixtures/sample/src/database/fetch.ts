@@ -1,6 +1,7 @@
+import { sampleEntity } from '../constants.js';
 import { Entity, GUID } from '../types.js';
 
-export async function fetchEntity<T extends Entity>(guid: GUID): Promise<T | undefined> {
+export async function fetchEntity(guid: GUID): Promise<Entity | undefined> {
     console.log(`Fetch Entity ${guid}`);
-    return undefined;
+    return { ...sampleEntity, guid };
 }

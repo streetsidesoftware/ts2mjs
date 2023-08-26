@@ -12,8 +12,9 @@ const isSupportedFileMJS = /\.(m?js|d\.m?ts)$/;
 const isSupportedFileCJS = /\.(c?js|d\.c?ts)$/;
 
 const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
+const regExpRequire = /require\(('|")(?<file>\..*?)\1\);/g;
 
-type ExtensionType = 'cjs' | 'mjs';
+type ExtensionType = '.cjs' | '.mjs';
 
 export interface ProcessFileResult {
     filename: string;
@@ -32,10 +33,10 @@ export interface ProcessSourceFileResult extends ProcessFileResult {
 
 export function processSourceFile(src: SourceFile, options: ProcessFileOptions): ProcessSourceFileResult | undefined {
     const { srcFilename, content, map: mappings } = src;
-    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
+    const { root: srcRoot, target: targetRoot, ext } = options;
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
-    if (options.ext === 'cjs') {
+    if (options.ext === '.cjs') {
         assert(isSupportedFileCJS.test(srcFilename), 'Must be a supported file type (.js, .cjs, .d.ts, .d.cts).');
     } else {
         assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
@@ -47,9 +48,36 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
         return undefined;
     }
 
-    const exp = new RegExp(regExpImportExport);
-
     const magicString = createMagicString(content, { filename: src.srcFilename });
+
+    let linesChanged = adjustImportExportStatements(src, options, magicString);
+    linesChanged += adjustRequireStatements(src, options, magicString);
+
+    const sourceMap = remapSourceMap(mappings, magicString, srcFilename, filename);
+
+    if (!linesChanged)
+        return {
+            filename,
+            oldFilename: srcFilename,
+            content: addSourceMapToContent(content, sourceMap),
+            mappings: sourceMap,
+        };
+
+    return {
+        filename,
+        oldFilename: srcFilename,
+        content: addSourceMapToContent(magicString.toString(), sourceMap),
+        linesChanged,
+        mappings: sourceMap,
+    };
+}
+
+function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
+    const { srcFilename } = src;
+    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
+    const content = magicString.toString();
+
+    const exp = new RegExp(regExpImportExport);
 
     let linesChanged = 0;
     let match: RegExpExecArray | null;
@@ -73,34 +101,55 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
                     options.warning(message);
                 }
             }
-            const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot);
+            const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
             magicString.update(start, end, newRef);
             linesChanged += 1;
             continue;
         }
     }
+    return linesChanged;
+}
 
-    const sourceMap = remapSourceMap(mappings, magicString, srcFilename, filename);
+function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
+    const { srcFilename } = src;
+    const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
+    const content = magicString.toString();
 
-    if (!linesChanged)
-        return {
-            filename,
-            oldFilename: srcFilename,
-            content: addSourceMapToContent(content, sourceMap),
-            mappings: sourceMap,
-        };
+    const exp = new RegExp(regExpRequire);
 
-    return {
-        filename,
-        oldFilename: srcFilename,
-        content: addSourceMapToContent(magicString.toString(), sourceMap),
-        linesChanged,
-        mappings: sourceMap,
-    };
+    let linesChanged = 0;
+    let match: RegExpExecArray | null;
+    while ((match = exp.exec(content))) {
+        const { index } = match;
+
+        const line = match[0];
+        const reference = match.groups?.['file'];
+
+        if (reference && isRelativePath(reference)) {
+            const start = index + line.lastIndexOf(reference);
+            const end = start + reference.length;
+            if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
+                const message = `Import of a file outside of the root. Require: (${reference}) Source: (${relative(
+                    srcRoot,
+                    srcFilename,
+                )})`;
+                if (!allowJsOutsideOfRoot) {
+                    throw new UsageError(message);
+                } else {
+                    options.warning(message);
+                }
+            }
+            const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
+            magicString.update(start, end, newRef);
+            linesChanged += 1;
+            continue;
+        }
+    }
+    return linesChanged;
 }
 
 export function isSupportedFileType(filename: string, ext: ExtensionType): boolean {
-    return (ext === 'mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
+    return (ext === '.mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
 }
 
 export interface ProcessFileOptions {
@@ -122,7 +171,7 @@ export async function processFile(filename: string, options: ProcessFileOptions)
 
 function calcNewFilename(srcFilename: string, root: string, target: string, ext: ExtensionType): string {
     const newName =
-        ext === 'mjs'
+        ext === '.mjs'
             ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1')
             : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.ts(.map)?$/, '.cts$1');
     return rebaseFile(newName, root, target);
@@ -172,10 +221,16 @@ function rebaseRelFileReference(importFile: string, currentFile: string, root: s
     return newImportFile;
 }
 
-function calcRelativeImportFilename(importFile: string, currentFile: string, root: string, target: string): string {
+function calcRelativeImportFilename(
+    importFile: string,
+    currentFile: string,
+    root: string,
+    target: string,
+    ext: ExtensionType,
+): string {
     const newImportFile = rebaseRelFileReference(importFile, currentFile, root, target);
     if (doesContain(root, pathJoin(dirname(currentFile), importFile))) {
-        return newImportFile.replace(/\.js$/, '.mjs');
+        return newImportFile.replace(/\.js$/, ext);
     }
     return newImportFile;
 }

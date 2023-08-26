@@ -34,8 +34,8 @@ describe('app', () => {
     });
 
     test.each`
-        args                               | expectedOutputs
-        ${['.', '--root=fixtures/sample']} | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('index.js.map - copy'), sc('done.')]}
+        args                                                          | expectedOutputs
+        ${['.', '--root=fixtures/sample', '--exclude=**/lib-cjs/**']} | ${[sm(/index.js\b.*\bindex.mjs Generated/), sc('index.js.map - copy'), sc('done.')]}
     `('run (actual) $args', async ({ args, expectedOutputs }: { args: string[]; expectedOutputs: unknown[] }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
         const argv = genArgv([...args, `--output=${tempDir}`], { dryRun: false });

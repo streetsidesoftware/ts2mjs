@@ -16,6 +16,10 @@ export interface Options {
      */
     cwd: string | undefined;
     /**
+     * Globs to exclude from processing.
+     */
+    exclude?: string[] | undefined;
+    /**
      * Dry Run, do not actually write files.
      */
     dryRun: boolean;
@@ -61,7 +65,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
         cjs = false,
     } = options;
 
-    const ext = cjs ? 'cjs' : 'mjs';
+    const ext = cjs ? '.cjs' : '.mjs';
 
     const filesWritten = new Map<string, Promise<void>>();
 

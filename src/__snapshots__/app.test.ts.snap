@@ -7,6 +7,10 @@ exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 1`] = `
 [log]: fixtures/sample/lib/app.d.ts.map -> fixtures/sample/lib/app.d.mts.map Generated
 [log]: fixtures/sample/lib/app.js -> fixtures/sample/lib/app.mjs Generated
 [log]: fixtures/sample/lib/app.js.map -> fixtures/sample/lib/app.mjs.map Generated
+[log]: fixtures/sample/lib/constants.d.ts -> fixtures/sample/lib/constants.d.mts Generated
+[log]: fixtures/sample/lib/constants.d.ts.map -> fixtures/sample/lib/constants.d.mts.map Generated
+[log]: fixtures/sample/lib/constants.js -> fixtures/sample/lib/constants.mjs Generated
+[log]: fixtures/sample/lib/constants.js.map -> fixtures/sample/lib/constants.mjs.map Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts.map -> fixtures/sample/lib/database/fetch.d.mts.map Generated
 [log]: fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Generated
@@ -41,6 +45,10 @@ exports[`app > run (--dry-run) [ 'fixtures/sample/lib' ] 2`] = `
 [log]: fixtures/sample/lib/app.d.ts.map -> fixtures/sample/lib/app.d.mts.map Generated
 [log]: fixtures/sample/lib/app.js -> fixtures/sample/lib/app.mjs Generated
 [log]: fixtures/sample/lib/app.js.map -> fixtures/sample/lib/app.mjs.map Generated
+[log]: fixtures/sample/lib/constants.d.ts -> fixtures/sample/lib/constants.d.mts Generated
+[log]: fixtures/sample/lib/constants.d.ts.map -> fixtures/sample/lib/constants.d.mts.map Generated
+[log]: fixtures/sample/lib/constants.js -> fixtures/sample/lib/constants.mjs Generated
+[log]: fixtures/sample/lib/constants.js.map -> fixtures/sample/lib/constants.mjs.map Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts -> fixtures/sample/lib/database/fetch.d.mts Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts.map -> fixtures/sample/lib/database/fetch.d.mts.map Generated
 [log]: fixtures/sample/lib/database/fetch.js -> fixtures/sample/lib/database/fetch.mjs Generated
@@ -87,6 +95,12 @@ exports[`app > run (--dry-run) [ Array(3) ] 1`] = `
 [log]: fixtures/sample/lib/app.js -> temp/app.mjs Generated
 [log]: fixtures/sample/lib/app.js.map - copy
 [log]: fixtures/sample/lib/app.js.map -> temp/app.mjs.map Generated
+[log]: fixtures/sample/lib/constants.d.ts -> temp/constants.d.mts Generated
+[log]: fixtures/sample/lib/constants.d.ts.map - copy
+[log]: fixtures/sample/lib/constants.d.ts.map -> temp/constants.d.mts.map Generated
+[log]: fixtures/sample/lib/constants.js -> temp/constants.mjs Generated
+[log]: fixtures/sample/lib/constants.js.map - copy
+[log]: fixtures/sample/lib/constants.js.map -> temp/constants.mjs.map Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts -> temp/database/fetch.d.mts Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
 [log]: fixtures/sample/lib/database/fetch.d.ts.map -> temp/database/fetch.d.mts.map Generated
@@ -132,6 +146,12 @@ exports[`app > run (--dry-run) [ Array(3) ] 2`] = `
 [log]: app.js -> ../../../temp/fixtures/sample/lib/app.mjs Generated
 [log]: app.js.map - copy
 [log]: app.js.map -> ../../../temp/fixtures/sample/lib/app.mjs.map Generated
+[log]: constants.d.ts -> ../../../temp/fixtures/sample/lib/constants.d.mts Generated
+[log]: constants.d.ts.map - copy
+[log]: constants.d.ts.map -> ../../../temp/fixtures/sample/lib/constants.d.mts.map Generated
+[log]: constants.js -> ../../../temp/fixtures/sample/lib/constants.mjs Generated
+[log]: constants.js.map - copy
+[log]: constants.js.map -> ../../../temp/fixtures/sample/lib/constants.mjs.map Generated
 [log]: database/fetch.d.ts -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts Generated
 [log]: database/fetch.d.ts.map - copy
 [log]: database/fetch.d.ts.map -> ../../../temp/fixtures/sample/lib/database/fetch.d.mts.map Generated
@@ -170,52 +190,21 @@ exports[`app > run (--dry-run) [ Array(3) ] 2`] = `
 "
 `;
 
-exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
+exports[`app > run (actual) [ Array(3) ] 1`] = `
 "Console Output:
 [log]: done.
-[log]: fixtures/sample/lib-cjs/app.cjs - copy
-[log]: fixtures/sample/lib-cjs/app.d.ts -> temp/lib-cjs/app.d.mts Generated
-[log]: fixtures/sample/lib-cjs/app.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/app.d.ts.map -> temp/lib-cjs/app.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/app.js -> temp/lib-cjs/app.mjs Generated
-[log]: fixtures/sample/lib-cjs/app.js.map - copy
-[log]: fixtures/sample/lib-cjs/app.js.map -> temp/lib-cjs/app.mjs.map Generated
-[log]: fixtures/sample/lib-cjs/database/fetch.d.ts -> temp/lib-cjs/database/fetch.d.mts Generated
-[log]: fixtures/sample/lib-cjs/database/fetch.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/database/fetch.d.ts.map -> temp/lib-cjs/database/fetch.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/database/fetch.js -> temp/lib-cjs/database/fetch.mjs Generated
-[log]: fixtures/sample/lib-cjs/database/fetch.js.map - copy
-[log]: fixtures/sample/lib-cjs/database/fetch.js.map -> temp/lib-cjs/database/fetch.mjs.map Generated
-[log]: fixtures/sample/lib-cjs/database/index.d.ts -> temp/lib-cjs/database/index.d.mts Generated
-[log]: fixtures/sample/lib-cjs/database/index.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/database/index.d.ts.map -> temp/lib-cjs/database/index.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/database/index.js -> temp/lib-cjs/database/index.mjs Generated
-[log]: fixtures/sample/lib-cjs/database/index.js.map - copy
-[log]: fixtures/sample/lib-cjs/database/index.js.map -> temp/lib-cjs/database/index.mjs.map Generated
-[log]: fixtures/sample/lib-cjs/index.d.ts -> temp/lib-cjs/index.d.mts Generated
-[log]: fixtures/sample/lib-cjs/index.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/index.d.ts.map -> temp/lib-cjs/index.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/index.js -> temp/lib-cjs/index.mjs Generated
-[log]: fixtures/sample/lib-cjs/index.js.map - copy
-[log]: fixtures/sample/lib-cjs/index.js.map -> temp/lib-cjs/index.mjs.map Generated
-[log]: fixtures/sample/lib-cjs/lookup.d.ts -> temp/lib-cjs/lookup.d.mts Generated
-[log]: fixtures/sample/lib-cjs/lookup.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/lookup.d.ts.map -> temp/lib-cjs/lookup.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/lookup.js -> temp/lib-cjs/lookup.mjs Generated
-[log]: fixtures/sample/lib-cjs/lookup.js.map - copy
-[log]: fixtures/sample/lib-cjs/lookup.js.map -> temp/lib-cjs/lookup.mjs.map Generated
-[log]: fixtures/sample/lib-cjs/types.d.ts -> temp/lib-cjs/types.d.mts Generated
-[log]: fixtures/sample/lib-cjs/types.d.ts.map - copy
-[log]: fixtures/sample/lib-cjs/types.d.ts.map -> temp/lib-cjs/types.d.mts.map Generated
-[log]: fixtures/sample/lib-cjs/types.js -> temp/lib-cjs/types.mjs Generated
-[log]: fixtures/sample/lib-cjs/types.js.map - copy
-[log]: fixtures/sample/lib-cjs/types.js.map -> temp/lib-cjs/types.mjs.map Generated
 [log]: fixtures/sample/lib/app.d.ts -> temp/lib/app.d.mts Generated
 [log]: fixtures/sample/lib/app.d.ts.map - copy
 [log]: fixtures/sample/lib/app.d.ts.map -> temp/lib/app.d.mts.map Generated
 [log]: fixtures/sample/lib/app.js -> temp/lib/app.mjs Generated
 [log]: fixtures/sample/lib/app.js.map - copy
 [log]: fixtures/sample/lib/app.js.map -> temp/lib/app.mjs.map Generated
+[log]: fixtures/sample/lib/constants.d.ts -> temp/lib/constants.d.mts Generated
+[log]: fixtures/sample/lib/constants.d.ts.map - copy
+[log]: fixtures/sample/lib/constants.d.ts.map -> temp/lib/constants.d.mts.map Generated
+[log]: fixtures/sample/lib/constants.js -> temp/lib/constants.mjs Generated
+[log]: fixtures/sample/lib/constants.js.map - copy
+[log]: fixtures/sample/lib/constants.js.map -> temp/lib/constants.mjs.map Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts -> temp/lib/database/fetch.d.mts Generated
 [log]: fixtures/sample/lib/database/fetch.d.ts.map - copy
 [log]: fixtures/sample/lib/database/fetch.d.ts.map -> temp/lib/database/fetch.d.mts.map Generated
@@ -254,6 +243,14 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
 [log]: fixtures/sample/out/app.mjs -> temp/out/app.mjs Generated
 [log]: fixtures/sample/out/app.mjs.map - copy
 [log]: fixtures/sample/out/app.mjs.map -> temp/out/app.mjs.map Generated
+[log]: fixtures/sample/out/constants.d.mts -> temp/out/constants.d.mts Generated
+[log]: fixtures/sample/out/constants.d.mts.map - copy
+[log]: fixtures/sample/out/constants.d.mts.map -> temp/out/constants.d.mts.map Generated
+[log]: fixtures/sample/out/constants.d.ts.map - copy
+[log]: fixtures/sample/out/constants.js.map - copy
+[log]: fixtures/sample/out/constants.mjs -> temp/out/constants.mjs Generated
+[log]: fixtures/sample/out/constants.mjs.map - copy
+[log]: fixtures/sample/out/constants.mjs.map -> temp/out/constants.mjs.map Generated
 [log]: fixtures/sample/out/database/fetch.d.mts -> temp/out/database/fetch.d.mts Generated
 [log]: fixtures/sample/out/database/fetch.d.mts.map - copy
 [log]: fixtures/sample/out/database/fetch.d.mts.map -> temp/out/database/fetch.d.mts.map Generated
@@ -295,6 +292,7 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
 [log]: fixtures/sample/out/types.mjs.map - copy
 [log]: fixtures/sample/out/types.mjs.map -> temp/out/types.mjs.map Generated
 [log]: fixtures/sample/src/app.ts - copy
+[log]: fixtures/sample/src/constants.ts - copy
 [log]: fixtures/sample/src/database/fetch.ts - copy
 [log]: fixtures/sample/src/database/index.ts - copy
 [log]: fixtures/sample/src/index.ts - copy
@@ -330,13 +328,14 @@ exports[`app > run error '--help' 1`] = `
 [stdout]: Rename ESM .js files to .mjs (or .cjs if --cjs options is used)
 [stdout]: 
 [stdout]: Arguments:
-[stdout]:   files                 The files to rename.
+[stdout]:   files                 Globs matching files to rename.
 [stdout]: 
 [stdout]: Options:
-[stdout]:   --cjs                 Files are renamed to .cjs.
+[stdout]:   --cjs                 Use .cjs extension instead of .mjs extension.
 [stdout]:   -o, --output <dir>    The output directory.
 [stdout]:   --cwd <dir>           The current working directory.
 [stdout]:   --root <dir>          The root directory.
+[stdout]:   -x,--exclude <glob>   Exclude a glob from the files. (default: [])
 [stdout]:   --dry-run             Dry Run do not update files.
 [stdout]:   --no-must-find-files  No error if files are not found.
 [stdout]:   --no-enforce-root     Do not fail if relative \`.js\` files outside of the root

@@ -7,27 +7,51 @@ export { fetchEntity } from './database/index.mjs';
 //# sourceMappingURL=index.d.mts.map"
 `;
 
-exports[`processFile > processFile 'sample/lib/index.d.ts' 2`] = `
-"export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.mjs';
-export { lookUpPerson } from './lookup.mjs';
-export { fetchEntity } from './database/index.mjs';
-//# sourceMappingURL=index.d.cts.map"
-`;
-
 exports[`processFile > processFile 'sample/lib/index.js' 1`] = `
 "export { lookUpPerson } from './lookup.mjs';
 export { fetchEntity } from './database/index.mjs';
 //# sourceMappingURL=index.mjs.map"
 `;
 
-exports[`processFile > processFile 'sample/lib/index.js' 2`] = `
-"export { lookUpPerson } from './lookup.mjs';
-export { fetchEntity } from './database/index.mjs';
+exports[`processFile > processFile 'sample/lib-cjs/index.d.ts' 1`] = `
+"export { PrimeNumber, Tuple, GUID, AddressGuid, Address, PhoneNumberGuid, PhoneNumber, PersonGuid, Person, Annotation, } from './types.cjs';
+export { lookUpPerson } from './lookup.cjs';
+export { fetchEntity } from './database/index.cjs';
+//# sourceMappingURL=index.d.cts.map"
+`;
+
+exports[`processFile > processFile 'sample/lib-cjs/index.js' 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.fetchEntity = exports.lookUpPerson = void 0;
+var lookup_js_1 = require(\\"./lookup.cjs\\");
+Object.defineProperty(exports, \\"lookUpPerson\\", { enumerable: true, get: function () { return lookup_js_1.lookUpPerson; } });
+var index_js_1 = require(\\"./database/index.cjs\\");
+Object.defineProperty(exports, \\"fetchEntity\\", { enumerable: true, get: function () { return index_js_1.fetchEntity; } });
 //# sourceMappingURL=index.cjs.map"
 `;
 
 exports[`processFile > processFile allowJsOutsideOfRoot 'sample/lib/database/fetch.d.ts' 1`] = `
 "import { Entity, GUID } from '../../../../../fixtures/sample/lib/types.js';
-export declare function fetchEntity<T extends Entity>(guid: GUID): Promise<T | undefined>;
+export declare function fetchEntity(guid: GUID): Promise<Entity | undefined>;
 //# sourceMappingURL=fetch.d.mts.map"
+`;
+
+exports[`processFile > processFile allowJsOutsideOfRoot 'sample/lib-cjs/database/fetch.d.ts' 1`] = `
+"import { Entity, GUID } from '../../../../../fixtures/sample/lib-cjs/types.js';
+export declare function fetchEntity(guid: GUID): Promise<Entity | undefined>;
+//# sourceMappingURL=fetch.d.cts.map"
+`;
+
+exports[`processFile > processFile allowJsOutsideOfRoot 'sample/lib-cjs/database/fetch.js' 1`] = `
+"\\"use strict\\";
+Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.fetchEntity = void 0;
+const constants_js_1 = require(\\"../../../../../fixtures/sample/lib-cjs/constants.js\\");
+async function fetchEntity(guid) {
+    console.log(\`Fetch Entity \${guid}\`);
+    return { ...constants_js_1.sampleEntity, guid };
+}
+exports.fetchEntity = fetchEntity;
+//# sourceMappingURL=fetch.cjs.map"
 `;

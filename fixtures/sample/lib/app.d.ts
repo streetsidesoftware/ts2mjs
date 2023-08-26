@@ -1,2 +1,2 @@
-export declare function run(): Promise<void>;
+export {};
 //# sourceMappingURL=app.d.ts.map
