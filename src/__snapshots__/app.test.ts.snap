@@ -174,36 +174,59 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample' ] 1`] = `
 "Console Output:
 [log]: done.
 [log]: fixtures/sample/lib-cjs/app.cjs - copy
+[log]: fixtures/sample/lib-cjs/app.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/app.d.cts - copy
+[log]: fixtures/sample/lib-cjs/app.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/app.d.ts -> temp/lib-cjs/app.d.mts Generated
 [log]: fixtures/sample/lib-cjs/app.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/app.d.ts.map -> temp/lib-cjs/app.d.mts.map Generated
 [log]: fixtures/sample/lib-cjs/app.js -> temp/lib-cjs/app.mjs Generated
 [log]: fixtures/sample/lib-cjs/app.js.map - copy
 [log]: fixtures/sample/lib-cjs/app.js.map -> temp/lib-cjs/app.mjs.map Generated
+[log]: fixtures/sample/lib-cjs/database/fetch.cjs - copy
+[log]: fixtures/sample/lib-cjs/database/fetch.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/database/fetch.d.cts - copy
+[log]: fixtures/sample/lib-cjs/database/fetch.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/database/fetch.d.ts -> temp/lib-cjs/database/fetch.d.mts Generated
 [log]: fixtures/sample/lib-cjs/database/fetch.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/database/fetch.d.ts.map -> temp/lib-cjs/database/fetch.d.mts.map Generated
 [log]: fixtures/sample/lib-cjs/database/fetch.js -> temp/lib-cjs/database/fetch.mjs Generated
 [log]: fixtures/sample/lib-cjs/database/fetch.js.map - copy
 [log]: fixtures/sample/lib-cjs/database/fetch.js.map -> temp/lib-cjs/database/fetch.mjs.map Generated
+[log]: fixtures/sample/lib-cjs/database/index.cjs - copy
+[log]: fixtures/sample/lib-cjs/database/index.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/database/index.d.cts - copy
+[log]: fixtures/sample/lib-cjs/database/index.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/database/index.d.ts -> temp/lib-cjs/database/index.d.mts Generated
 [log]: fixtures/sample/lib-cjs/database/index.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/database/index.d.ts.map -> temp/lib-cjs/database/index.d.mts.map Generated
 [log]: fixtures/sample/lib-cjs/database/index.js -> temp/lib-cjs/database/index.mjs Generated
 [log]: fixtures/sample/lib-cjs/database/index.js.map - copy
 [log]: fixtures/sample/lib-cjs/database/index.js.map -> temp/lib-cjs/database/index.mjs.map Generated
+[log]: fixtures/sample/lib-cjs/index.cjs - copy
+[log]: fixtures/sample/lib-cjs/index.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/index.d.cts - copy
+[log]: fixtures/sample/lib-cjs/index.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/index.d.ts -> temp/lib-cjs/index.d.mts Generated
 [log]: fixtures/sample/lib-cjs/index.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/index.d.ts.map -> temp/lib-cjs/index.d.mts.map Generated
 [log]: fixtures/sample/lib-cjs/index.js -> temp/lib-cjs/index.mjs Generated
 [log]: fixtures/sample/lib-cjs/index.js.map - copy
 [log]: fixtures/sample/lib-cjs/index.js.map -> temp/lib-cjs/index.mjs.map Generated
+[log]: fixtures/sample/lib-cjs/lookup.cjs - copy
+[log]: fixtures/sample/lib-cjs/lookup.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/lookup.d.cts - copy
+[log]: fixtures/sample/lib-cjs/lookup.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/lookup.d.ts -> temp/lib-cjs/lookup.d.mts Generated
 [log]: fixtures/sample/lib-cjs/lookup.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/lookup.d.ts.map -> temp/lib-cjs/lookup.d.mts.map Generated
 [log]: fixtures/sample/lib-cjs/lookup.js -> temp/lib-cjs/lookup.mjs Generated
 [log]: fixtures/sample/lib-cjs/lookup.js.map - copy
 [log]: fixtures/sample/lib-cjs/lookup.js.map -> temp/lib-cjs/lookup.mjs.map Generated
+[log]: fixtures/sample/lib-cjs/types.cjs - copy
+[log]: fixtures/sample/lib-cjs/types.cjs.map - copy
+[log]: fixtures/sample/lib-cjs/types.d.cts - copy
+[log]: fixtures/sample/lib-cjs/types.d.cts.map - copy
 [log]: fixtures/sample/lib-cjs/types.d.ts -> temp/lib-cjs/types.d.mts Generated
 [log]: fixtures/sample/lib-cjs/types.d.ts.map - copy
 [log]: fixtures/sample/lib-cjs/types.d.ts.map -> temp/lib-cjs/types.d.mts.map Generated
@@ -333,7 +356,7 @@ exports[`app > run error '--help' 1`] = `
 [stdout]:   files                 The files to rename.
 [stdout]: 
 [stdout]: Options:
-[stdout]:   --cjs                 Files are renamed to .cjs.
+[stdout]:   --cjs                 Use .cjs extension instead of .mjs extension.
 [stdout]:   -o, --output <dir>    The output directory.
 [stdout]:   --cwd <dir>           The current working directory.
 [stdout]:   --root <dir>          The root directory.
