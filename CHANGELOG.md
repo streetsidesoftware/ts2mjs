@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/streetsidesoftware/ts2mjs/compare/v2.0.0...v2.1.0) (2023-08-26)
+
+
+### Features
+
+* Add option `--exclude` ([#71](https://github.com/streetsidesoftware/ts2mjs/issues/71)) ([0d66c08](https://github.com/streetsidesoftware/ts2mjs/commit/0d66c086da16fdce562d6eaed8635ee9b7247032))
+* Support generating .cjs files ([#69](https://github.com/streetsidesoftware/ts2mjs/issues/69)) ([73c88e9](https://github.com/streetsidesoftware/ts2mjs/commit/73c88e9e5f6eef4ce007e53afe3f9b95c1e5e196))
+
 ## [2.0.0](https://github.com/streetsidesoftware/ts2mjs/compare/v1.1.2...v2.0.0) (2023-08-21)
 
 
