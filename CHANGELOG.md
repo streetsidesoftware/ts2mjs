@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/streetsidesoftware/ts2mjs/compare/v2.1.0...v2.1.1) (2023-08-28)
+
+
+### Bug Fixes
+
+* Remove debug output ([#76](https://github.com/streetsidesoftware/ts2mjs/issues/76)) ([c70b3a8](https://github.com/streetsidesoftware/ts2mjs/commit/c70b3a85e7761c55523bd41becb6c28d78758010))
+
 ## [2.1.0](https://github.com/streetsidesoftware/ts2mjs/compare/v2.0.0...v2.1.0) (2023-08-26)
 
 
