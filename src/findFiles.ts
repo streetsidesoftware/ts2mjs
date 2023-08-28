@@ -10,7 +10,6 @@ export interface FindFileOptions {
 }
 
 export async function findFiles(globs: string[], options: FindFileOptions) {
-    console.warn('options: %o', options);
     const globOptions: GlobbyOptions = {
         ignore: excludes.concat(options.exclude || []),
         onlyFiles: options.onlyFiles ?? true,
