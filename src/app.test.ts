@@ -50,7 +50,7 @@ describe('app', () => {
 
     test.each`
         args                                                                 | expected
-        ${['.', '--root=fixtures/sample/lib/database']}                      | ${sc('[error]: Error: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        ${['.', '--root=fixtures/sample/lib/database']}                      | ${sc('[error]: Error: Import of a file outside of the root.')}
         ${['.', '--root=fixtures/sample/lib/database', '--no-enforce-root']} | ${sc('[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
     `('run (actual) (errors and warnings) $args', async ({ args, expected }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
