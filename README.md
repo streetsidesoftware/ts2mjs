@@ -36,11 +36,11 @@ This is an example on how to create a package that exports both CommonJS and ESM
 ```jsonc
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "module": "ES2020",
-    "moduleResolution": "node16",
+    "module": "ES2022",
+    "moduleResolution": "node",
     "outDir": "dist/esm",
     "sourceMap": true
   },
@@ -53,11 +53,11 @@ This is an example on how to create a package that exports both CommonJS and ESM
 ```jsonc
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "module": "CommonJS",
-    "moduleResolution": "node16",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "dist/cjs",
     "sourceMap": true
   },
