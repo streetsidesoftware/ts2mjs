@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/streetsidesoftware/ts2mjs/compare/v2.1.1...v3.0.0) (2024-03-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support for Node16 ([#122](https://github.com/streetsidesoftware/ts2mjs/issues/122))
+
+### Features
+
+* Drop support for Node16 ([#122](https://github.com/streetsidesoftware/ts2mjs/issues/122)) ([630bdc3](https://github.com/streetsidesoftware/ts2mjs/commit/630bdc3cde664c6f94a2a219ded21cf2700a4681))
+
 ## [2.1.1](https://github.com/streetsidesoftware/ts2mjs/compare/v2.1.0...v2.1.1) (2023-08-28)
 
 
