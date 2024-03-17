@@ -9,3 +9,43 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'weekly'
+
+  # Automatically added by streetsidesoftware/public/update-dependabot-github-actions
+  - package-ecosystem: github-actions
+    directory: /.github/actions/setup
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: ci
+
+  # Automatically added by streetsidesoftware/public/update-dependabot-github-actions
+  - package-ecosystem: github-actions
+    directory: /.github/actions/pr
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: ci
+
+  # Automatically added by streetsidesoftware/public/update-dependabot-github-actions
+  - package-ecosystem: github-actions
+    directory: /.github/actions/output
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: ci
+
+  # Automatically added by streetsidesoftware/public/update-dependabot-github-actions
+  - package-ecosystem: github-actions
+    directory: /.github/actions/install-build-test
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: ci
+
+  # Automatically added by streetsidesoftware/public/update-dependabot-github-actions
+  - package-ecosystem: github-actions
+    directory: /.github/actions/github-app-token
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: ci
