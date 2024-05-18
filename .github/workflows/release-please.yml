@@ -22,7 +22,7 @@ jobs:
         with:
           command: manifest
 
-  # cspell:ignore noreply
+  # cspell:ignore noreply googleapis
 
   publish:
     runs-on: ubuntu-latest
