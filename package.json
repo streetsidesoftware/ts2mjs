@@ -68,7 +68,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-promise": "^7.2.1",
     "inject-markdown": "^3.1.4",
     "prettier": "^3.4.2",
     "shx": "^0.3.4",
