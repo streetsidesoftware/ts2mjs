@@ -122,20 +122,20 @@ function replaceAll(text: string, replace: string, withValue: string): string {
 }
 
 interface AppLogger {
-    log: Mock<[string], void>;
-    warn: Mock<[string], void>;
-    error: Mock<[string], void>;
-    stderr: Mock<[string], void>;
-    stdout: Mock<[string], void>;
+    log: Mock<(msg: string) => void>;
+    warn: Mock<(msg: string) => void>;
+    error: Mock<(msg: string) => void>;
+    stderr: Mock<(msg: string) => void>;
+    stdout: Mock<(msg: string) => void>;
 }
 
 function getAppLogger(): AppLogger {
     return {
-        log: vi.fn<[string], void>(),
-        warn: vi.fn<[string], void>(),
-        error: vi.fn<[string], void>(),
-        stderr: vi.fn<[string], void>(),
-        stdout: vi.fn<[string], void>(),
+        log: vi.fn(),
+        warn: vi.fn(),
+        error: vi.fn(),
+        stderr: vi.fn(),
+        stdout: vi.fn(),
     };
 }
 

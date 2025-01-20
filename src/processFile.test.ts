@@ -76,9 +76,9 @@ describe('processFile', () => {
 
     test.each`
         file                      | root            | ext       | expected
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${new UsageError('Must be a supported file type (.js, .mjs, .d.ts, .d.mts).')}
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${new UsageError('Must be a supported file type (.js, .cjs, .d.ts, .d.cts).')}
-        ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${new UsageError('Must be under root.')}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).'}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${'Must be a supported file type (.js, .cjs, .d.ts, .d.cts).'}
+        ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${'Must be under root.'}
     `('processFile not processed $file', async ({ file, root, ext, expected }) => {
         root = ff(root);
         file = ff(file);
