@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "chalk": "^5.4.1",
-    "commander": "^12.1.0",
+    "commander": "^13.1.0",
     "globby": "^14.0.2",
     "magic-string": "^0.30.17"
   },
