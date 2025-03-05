@@ -39,7 +39,7 @@ jobs:
           text: ${{ steps.dependabot.outputs.summary }}
 
       - name: PR
-        uses: ./.github/actions/pr
+        uses: streetsidesoftware/actions/.github/actions/pr@v1
         with:
           commit-message: '${{ env.PR_TYPE }}: Workflow Bot -- Update dependabot.yml'
           branch: ${{ env.NEW_BRANCH }}

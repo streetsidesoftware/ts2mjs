@@ -35,36 +35,19 @@ jobs:
         run: |
           pnpm i --no-frozen-lockfile
 
-      - name: Git Summary
-        run: |
-          echo 'git_summary<<DIFF' >> $GITHUB_ENV
-          git --no-pager diff --compact-summary >> $GITHUB_ENV
-          echo 'DIFF' >> $GITHUB_ENV
-
-      - name: Gen Body
+      - name: PR Body
         id: body
-        uses: ./.github/actions/output
+        uses: streetsidesoftware/actions/public/pr-body@v1
         with:
-          value: |
-            ## Update Dependencies
+          title: Update Dependencies
+          path: package.json
 
-            ```
-            ${{ env.git_summary }}
-            ```
-
-      - name: Show Body
-        env:
-          BODY: ${{ steps.body.outputs.value }}
-        run: |
-          echo "$BODY"
-
-      - name: Create Pull Request
-        uses: ./.github/actions/pr
+      - name: PR
+        uses: streetsidesoftware/actions/.github/actions/pr@v1
         with:
           commit-message: 'ci: Workflow Bot -- Update ALL Dependencies'
           branch: ${{ env.NEW_BRANCH }}
           base: ${{ env.REF_BRANCH }}
-          title: 'ci: Workflow Bot -- Update ALL Dependencies (${{ env.REF_BRANCH }})'
-          body: ${{ steps.body.outputs.value }}
+          body: ${{ steps.body.outputs.body }}
           app_id: ${{ secrets.AUTOMATION_APP_ID }}
           app_private_key: ${{ secrets.AUTOMATION_PRIVATE_KEY }}
