@@ -121,21 +121,23 @@ function replaceAll(text: string, replace: string, withValue: string): string {
     return result;
 }
 
+type LogFn = (message: string) => void;
+
 interface AppLogger {
-    log: Mock<[string], void>;
-    warn: Mock<[string], void>;
-    error: Mock<[string], void>;
-    stderr: Mock<[string], void>;
-    stdout: Mock<[string], void>;
+    log: Mock<LogFn>;
+    warn: Mock<LogFn>;
+    error: Mock<LogFn>;
+    stderr: Mock<LogFn>;
+    stdout: Mock<LogFn>;
 }
 
 function getAppLogger(): AppLogger {
     return {
-        log: vi.fn<[string], void>(),
-        warn: vi.fn<[string], void>(),
-        error: vi.fn<[string], void>(),
-        stderr: vi.fn<[string], void>(),
-        stdout: vi.fn<[string], void>(),
+        log: vi.fn<LogFn>(),
+        warn: vi.fn<LogFn>(),
+        error: vi.fn<LogFn>(),
+        stderr: vi.fn<LogFn>(),
+        stdout: vi.fn<LogFn>(),
     };
 }
 
