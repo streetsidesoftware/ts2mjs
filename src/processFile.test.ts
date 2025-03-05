@@ -4,6 +4,7 @@ import { UsageError } from './errors.js';
 import { processSourceFile, __testing__, isSupportedFileType } from './processFile.js';
 import { readSourceFile } from './readSourceFile.js';
 import { resolveFixture, resolverTemp } from './test.util.js';
+import { AssertionError } from 'assert';
 
 const ff = resolveFixture;
 
@@ -76,9 +77,9 @@ describe('processFile', () => {
 
     test.each`
         file                      | root            | ext       | expected
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${new UsageError('Must be a supported file type (.js, .mjs, .d.ts, .d.mts).')}
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${new UsageError('Must be a supported file type (.js, .cjs, .d.ts, .d.cts).')}
-        ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${new UsageError('Must be under root.')}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError({ message: 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).' })}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${makeAssertionError('Must be a supported file type (.js, .cjs, .d.ts, .d.cts).')}
+        ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError('Must be under root.')}
     `('processFile not processed $file', async ({ file, root, ext, expected }) => {
         root = ff(root);
         file = ff(file);
@@ -148,3 +149,24 @@ describe('processFile', () => {
         expect(isSupportedFileType(filename, ext)).toBe(expected);
     });
 });
+
+interface AssertErrorOptions {
+    /** If provided, the error message is set to this value. */
+    message?: string | undefined;
+    /** The `actual` property on the error instance. */
+    actual?: unknown | undefined;
+    /** The `expected` property on the error instance. */
+    expected?: unknown | undefined;
+    /** The `operator` property on the error instance. */
+    operator?: string | undefined;
+}
+
+function makeAssertionError(err: string | AssertErrorOptions) {
+    const {
+        message,
+        actual = false,
+        expected = true,
+        operator = '==',
+    } = typeof err === 'string' ? { message: err } : err;
+    return new AssertionError({ message, actual, expected, operator });
+}
