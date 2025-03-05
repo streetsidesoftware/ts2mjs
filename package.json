@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
-    "@types/node": "^18.19.78",
+    "@types/node": "^18.19.79",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vitest/coverage-istanbul": "^1.6.1",
@@ -70,7 +70,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-promise": "^7.2.1",
     "inject-markdown": "^3.1.4",
-    "prettier": "^3.5.2",
+    "prettier": "^3.5.3",
     "shx": "^0.3.4",
     "typescript": "^5.8.2",
     "vite": "^6.2.0",
