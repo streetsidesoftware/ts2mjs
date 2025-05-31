@@ -11,12 +11,34 @@ const ff = resolveFixture;
 const oc = (obj: unknown) => expect.objectContaining(obj);
 const sc = (text: string) => expect.stringContaining(text);
 
+interface AssertErrorOptions {
+    /** If provided, the error message is set to this value. */
+    message?: string | undefined;
+    /** The `actual` property on the error instance. */
+    actual?: unknown | undefined;
+    /** The `expected` property on the error instance. */
+    expected?: unknown | undefined;
+    /** The `operator` property on the error instance. */
+    operator?: string | undefined;
+}
+
+function makeAssertionError(err: string | AssertErrorOptions) {
+    const {
+        message,
+        actual = false,
+        expected = true,
+        operator = '==',
+    } = typeof err === 'string' ? { message: err } : err;
+    return new AssertionError({ message, actual, expected, operator });
+}
+
 describe('processFile', () => {
     test.each`
         file                           | root                | target      | ext       | expected
         ${'sample/lib/index.js'}       | ${'sample/lib'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/index.mjs', linesChanged: 2 }}
+        ${'sample/lib/index.d.ts'}     | ${'sample/lib'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/index.d.mts', linesChanged: 3 }}
         ${'sample/lib-cjs/index.js'}   | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.cjs', linesChanged: 2 }}
-        ${'sample/lib-cjs/index.d.ts'} | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.d.ts', linesChanged: 3 }}
+        ${'sample/lib-cjs/index.d.ts'} | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.d.cts', linesChanged: 3 }}
     `('processFile $file', async ({ file, root, ext, target, expected }) => {
         const resolveTemp = resolverTemp();
         file = ff(file);
@@ -51,7 +73,8 @@ describe('processFile', () => {
 
     test.each`
         file                                    | root                         | target      | ext       | expected
-        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.d.ts', linesChanged: 1, content: sc("/../fixtures/sample/lib-cjs/types.js';") }}
+        ${'sample/lib/database/fetch.d.ts'}     | ${'sample/lib/database'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/fetch.d.mts', linesChanged: 1, content: sc("/../fixtures/sample/lib/types.js';") }}
+        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.d.cts', linesChanged: 1, content: sc("/../fixtures/sample/lib-cjs/types.js';") }}
         ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.cjs', linesChanged: 1, content: sc('../fixtures/sample/lib-cjs/constants.js");') }}
     `('processFile allowJsOutsideOfRoot $file', async ({ file, root, target, ext, expected }) => {
         const resolveTemp = resolverTemp();
@@ -75,8 +98,8 @@ describe('processFile', () => {
 
     test.each`
         file                      | root            | ext       | expected
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError({ message: 'Must be a supported file type (.js, .mjs, .d.mts).' })}
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${makeAssertionError('Must be a supported file type (.js, .cjs, .d.ts, .d.cts).')}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError({ message: 'Must be a supported file type (.js, .mjs, .ts, .mts, .d.ts, .d.mts).' })}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${makeAssertionError('Must be a supported file type (.js, .cjs, .ts, .cts, .d.ts, .d.cts).')}
         ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError('Must be under root.')}
     `('processFile not processed $file', async ({ file, root, ext, expected }) => {
         root = ff(root);
@@ -104,10 +127,11 @@ describe('processFile', () => {
         file                           | root        | target    | ext       | expected
         ${'sample/lib/index.js'}       | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.mjs'}
         ${'sample/lib/index.js.map'}   | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.mjs.map'}
+        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.d.mts.map'}
         ${'sample/lib/style.css'}      | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/style.css'}
         ${'sample/lib/index.js'}       | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.cjs'}
         ${'sample/lib/index.js.map'}   | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.cjs.map'}
-        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.d.ts.map'}
+        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.d.cts.map'}
         ${'sample/lib/style.css'}      | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/style.css'}
     `('calcNewFilename $file', ({ file, root, target, ext, expected }) => {
         expect(__testing__.calcNewFilename(ff(file), ff(root), ff(target), ext)).toEqual(ff(expected));
@@ -130,39 +154,28 @@ describe('processFile', () => {
     );
 
     test.each`
-        filename       | ext       | expected
-        ${'code.ts'}   | ${'.mjs'} | ${false}
-        ${'code.d.ts'} | ${'.mjs'} | ${false}
-        ${'code.js'}   | ${'.mjs'} | ${true}
-        ${'code.mjs'}  | ${'.mjs'} | ${true}
-        ${'code.cjs'}  | ${'.mjs'} | ${false}
-        ${'code.ts'}   | ${'.cjs'} | ${false}
-        ${'code.d.ts'} | ${'.cjs'} | ${true}
-        ${'code.js'}   | ${'.cjs'} | ${true}
-        ${'code.mjs'}  | ${'.cjs'} | ${false}
-        ${'code.cjs'}  | ${'.cjs'} | ${true}
-    `('isSupportedFileType $filename `$ext`', ({ filename, ext, expected }) => {
-        expect(isSupportedFileType(filename, ext)).toBe(expected);
+        filename       | ext       | skipTs    | expected
+        ${'code.ts'}   | ${'.mjs'} | ${false}  | ${true}
+        ${'code.ts'}   | ${'.mjs'} | ${true}   | ${false}
+        ${'code.d.ts'} | ${'.mjs'} | ${false}  | ${true}
+        ${'code.d.ts'} | ${'.mjs'} | ${true}   | ${false}
+        ${'code.js'}   | ${'.mjs'} | ${false}  | ${true}
+        ${'code.js'}   | ${'.mjs'} | ${true}   | ${true}
+        ${'code.mjs'}  | ${'.mjs'} | ${false}  | ${true}
+        ${'code.mjs'}  | ${'.mjs'} | ${true}   | ${true}
+        ${'code.cjs'}  | ${'.mjs'} | ${false}  | ${false}
+        ${'code.cjs'}  | ${'.mjs'} | ${true}   | ${false}
+        ${'code.ts'}   | ${'.cjs'} | ${false}  | ${true}
+        ${'code.ts'}   | ${'.cjs'} | ${true}   | ${false}
+        ${'code.d.ts'} | ${'.cjs'} | ${false}  | ${true}
+        ${'code.d.ts'} | ${'.cjs'} | ${true}   | ${false}
+        ${'code.js'}   | ${'.cjs'} | ${false}  | ${true}
+        ${'code.js'}   | ${'.cjs'} | ${true}   | ${true}
+        ${'code.mjs'}  | ${'.cjs'} | ${false}  | ${false}
+        ${'code.mjs'}  | ${'.cjs'} | ${true}   | ${false}
+        ${'code.cjs'}  | ${'.cjs'} | ${false}  | ${true}
+        ${'code.cjs'}  | ${'.cjs'} | ${true}   | ${true}
+    `('isSupportedFileType $filename `$ext` skipTs=$skipTs', ({ filename, ext, skipTs, expected }) => {
+        expect(isSupportedFileType(filename, ext, skipTs)).toBe(expected);
     });
 });
-
-interface AssertErrorOptions {
-    /** If provided, the error message is set to this value. */
-    message?: string | undefined;
-    /** The `actual` property on the error instance. */
-    actual?: unknown | undefined;
-    /** The `expected` property on the error instance. */
-    expected?: unknown | undefined;
-    /** The `operator` property on the error instance. */
-    operator?: string | undefined;
-}
-
-function makeAssertionError(err: string | AssertErrorOptions) {
-    const {
-        message,
-        actual = false,
-        expected = true,
-        operator = '==',
-    } = typeof err === 'string' ? { message: err } : err;
-    return new AssertionError({ message, actual, expected, operator });
-}

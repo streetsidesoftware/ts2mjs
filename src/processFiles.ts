@@ -52,6 +52,11 @@ export interface Options {
      * @default false
      */
     removeSource: boolean | undefined;
+    /**
+     * Skip all TypeScript files (.ts and .d.ts) instead of converting them.
+     * @default false
+     */
+    skipTs: boolean | undefined;
 }
 
 export interface ProcessFilesResult {
@@ -70,6 +75,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
         warning = console.warn,
         cjs = false,
         removeSource = false,
+        skipTs = false,
     } = options;
 
     const ext = cjs ? '.cjs' : '.mjs';
@@ -131,6 +137,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
             ext,
             allowJsOutsideOfRoot,
             warning,
+            skipTs,
         });
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
@@ -156,7 +163,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (!isSupportedFileType(filename, ext)) continue;
+        if (!isSupportedFileType(filename, ext, skipTs)) continue;
         pending.push(handleFile(filename));
     }
 
@@ -164,7 +171,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (isSupportedFileType(filename, ext)) continue;
+        if (isSupportedFileType(filename, ext, skipTs)) continue;
         pending.push(copyFile(filename));
     }
 
