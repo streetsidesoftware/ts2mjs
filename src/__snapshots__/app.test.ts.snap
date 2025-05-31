@@ -288,6 +288,7 @@ exports[`app > run error '--help' 1`] = `
 [stdout]:   --root <dir>          The root directory.
 [stdout]:   -x,--exclude <glob>   Exclude a glob from the files. (default: [])
 [stdout]:   --dry-run             Dry Run do not update files.
+[stdout]:   --remove-source       Remove the original files after successful conversion.
 [stdout]:   --no-must-find-files  No error if files are not found.
 [stdout]:   --no-enforce-root     Do not fail if relative \`.js\` files outside of the root
 [stdout]:                         are imported.

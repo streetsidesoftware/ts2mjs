@@ -54,6 +54,7 @@ interface CliOptions {
     verbose?: boolean;
     enforceRoot?: boolean;
     cjs?: boolean;
+    removeSource?: boolean;
     exclude: string[];
 }
 
@@ -76,6 +77,7 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
         .option('--root <dir>', 'The root directory.')
         .option('-x,--exclude <glob>', 'Exclude a glob from the files.', concat, [])
         .option('--dry-run', 'Dry Run do not update files.')
+        .option('--remove-source', 'Remove the original files after successful conversion.')
         .option('--no-must-find-files', 'No error if files are not found.')
         .option('--no-enforce-root', 'Do not fail if relative `.js` files outside of the root are imported.')
         .option('--color', 'Force color.')
@@ -112,6 +114,7 @@ export async function app(program = defaultCommand, logger?: AppLogger): Promise
                 warning,
                 root: optionsCli.root,
                 allowJsOutsideOfRoot: !(optionsCli.enforceRoot ?? true),
+                removeSource: optionsCli.removeSource,
             };
             await processFiles(files, processOptions);
             log(chalk.green('done.'));
