@@ -12,7 +12,7 @@ const isSupportedFileMJS = /\.(m?js|m?ts|d\.m?ts)$/;
 const isSupportedFileCJS = /\.(c?js|c?ts|d\.c?ts)$/;
 
 const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
-const regExpRequire = /require\(('|")(?<file>\..*?)\1\);/g;
+const regExpRequire = /require\(('|")(?<file>\..*?)\1\)/g;
 
 type ExtensionType = '.cjs' | '.mjs';
 
@@ -75,21 +75,17 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
 function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
     const { srcFilename } = src;
     const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
-    const content = magicString.toString();
-
-    const exp = new RegExp(regExpImportExport);
 
     let linesChanged = 0;
-    let match: RegExpExecArray | null;
-    while ((match = exp.exec(content))) {
-        const { index } = match;
+    const content = magicString.toString();
 
-        const line = match[0];
-        const reference = match.groups?.['file'];
+    // Use replace with a callback to handle all matches at once
+    const processedContent = content.replace(new RegExp(regExpImportExport, 'g'), (match, ...args) => {
+        // Extract groups from the match - the groups are at the end of args array
+        const groups = args[args.length - 1];
+        const reference = groups?.['file'];
 
         if (reference && isRelativePath(reference)) {
-            const start = index + line.lastIndexOf(reference);
-            const end = start + reference.length;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
                     srcRoot,
@@ -102,32 +98,34 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
                 }
             }
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
-            magicString.update(start, end, newRef);
             linesChanged += 1;
-            continue;
+            return match.replace(reference, newRef);
         }
+        return match;
+    });
+
+    // Apply all changes at once
+    if (linesChanged > 0) {
+        magicString.update(0, content.length, processedContent);
     }
+
     return linesChanged;
 }
 
 function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
     const { srcFilename } = src;
     const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
-    const content = magicString.toString();
-
-    const exp = new RegExp(regExpRequire);
 
     let linesChanged = 0;
-    let match: RegExpExecArray | null;
-    while ((match = exp.exec(content))) {
-        const { index } = match;
+    const content = magicString.toString();
 
-        const line = match[0];
-        const reference = match.groups?.['file'];
+    // Use replace with a callback to handle all matches at once
+    const processedContent = content.replace(new RegExp(regExpRequire, 'g'), (match, ...args) => {
+        // Extract groups from the match - the groups are at the end of args array
+        const groups = args[args.length - 1];
+        const reference = groups?.['file'];
 
         if (reference && isRelativePath(reference)) {
-            const start = index + line.lastIndexOf(reference);
-            const end = start + reference.length;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Require: (${reference}) Source: (${relative(
                     srcRoot,
@@ -140,11 +138,17 @@ function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, m
                 }
             }
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
-            magicString.update(start, end, newRef);
             linesChanged += 1;
-            continue;
+            return match.replace(reference, newRef);
         }
+        return match;
+    });
+
+    // Apply all changes at once
+    if (linesChanged > 0) {
+        magicString.update(0, content.length, processedContent);
     }
+
     return linesChanged;
 }
 

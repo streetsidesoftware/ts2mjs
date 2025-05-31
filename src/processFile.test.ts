@@ -178,4 +178,48 @@ describe('processFile', () => {
     `('isSupportedFileType $filename `$ext` skipTs=$skipTs', ({ filename, ext, skipTs, expected }) => {
         expect(isSupportedFileType(filename, ext, skipTs)).toBe(expected);
     });
+
+    test('handles duplicate imports correctly', async () => {
+        // Test case based on real compiled TypeScript output with duplicate imports
+        const content = `
+"use strict";
+const optional_require_ts_1 = require("./optional-require.js");
+Object.defineProperty(exports, "makeOptionalRequire", { enumerable: true, get: function () { return optional_require_ts_1.makeOptionalRequire; } });
+const optionalRequire = (0, optional_require_ts_1.makeOptionalRequire)(appPath);
+__exportStar(require("./optional-require.js"), exports);
+`.trim();
+
+        const src = { srcFilename: ff('sample/lib/test.js'), content };
+        const result = processSourceFile(src, {
+            root: ff('sample/lib'),
+            target: ff('temp'),
+            ext: '.cjs',
+            warning: vi.fn()
+        });
+
+        expect(result).toBeTruthy();
+
+        // Check that ALL occurrences are replaced, not just the first one
+        const jsOccurrences = (result!.content.match(/optional-require\.js/g) || []).length;
+        const cjsOccurrences = (result!.content.match(/optional-require\.cjs/g) || []).length;
+
+        expect(jsOccurrences).toBe(0); // No .js should remain
+        expect(cjsOccurrences).toBe(2); // Both should be converted to .cjs
+
+        // Verify the actual content contains the expected conversions
+        expect(result!.content).toContain('require("./optional-require.cjs")');
+        expect(result!.content).not.toContain('require("./optional-require.js")');
+    });
+
+    test.each`
+        file                                    | root                         | ext       | expected
+        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Require: (../constants.js) Source: (fetch.js)')}
+    `('processFile error $file', async ({ file, root, ext, expected }) => {
+        root = ff(root);
+        file = ff(file);
+        const source = await readSourceFile(file);
+        const target = ff('../temp/lib');
+        expect(() => processSourceFile(source, { root, target, ext, warning: vi.fn() })).toThrowError(expected);
+    });
 });
