@@ -15,9 +15,8 @@ describe('processFile', () => {
     test.each`
         file                           | root                | target      | ext       | expected
         ${'sample/lib/index.js'}       | ${'sample/lib'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/index.mjs', linesChanged: 2 }}
-        ${'sample/lib/index.d.ts'}     | ${'sample/lib'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/index.d.mts', linesChanged: 3 }}
         ${'sample/lib-cjs/index.js'}   | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.cjs', linesChanged: 2 }}
-        ${'sample/lib-cjs/index.d.ts'} | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.d.cts', linesChanged: 3 }}
+        ${'sample/lib-cjs/index.d.ts'} | ${'sample/lib-cjs'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/index.d.ts', linesChanged: 3 }}
     `('processFile $file', async ({ file, root, ext, target, expected }) => {
         const resolveTemp = resolverTemp();
         file = ff(file);
@@ -52,8 +51,7 @@ describe('processFile', () => {
 
     test.each`
         file                                    | root                         | target      | ext       | expected
-        ${'sample/lib/database/fetch.d.ts'}     | ${'sample/lib/database'}     | ${'target'} | ${'.mjs'} | ${{ filename: 'target/fetch.d.mts', linesChanged: 1, content: sc("/../fixtures/sample/lib/types.js';") }}
-        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.d.cts', linesChanged: 1, content: sc("/../fixtures/sample/lib-cjs/types.js';") }}
+        ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.d.ts', linesChanged: 1, content: sc("/../fixtures/sample/lib-cjs/types.js';") }}
         ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'target'} | ${'.cjs'} | ${{ filename: 'target/fetch.cjs', linesChanged: 1, content: sc('../fixtures/sample/lib-cjs/constants.js");') }}
     `('processFile allowJsOutsideOfRoot $file', async ({ file, root, target, ext, expected }) => {
         const resolveTemp = resolverTemp();
@@ -77,7 +75,7 @@ describe('processFile', () => {
 
     test.each`
         file                      | root            | ext       | expected
-        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError({ message: 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).' })}
+        ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError({ message: 'Must be a supported file type (.js, .mjs, .d.mts).' })}
         ${'sample/lib/image.css'} | ${'sample/lib'} | ${'.cjs'} | ${makeAssertionError('Must be a supported file type (.js, .cjs, .d.ts, .d.cts).')}
         ${'sample/src/index.js'}  | ${'sample/lib'} | ${'.mjs'} | ${makeAssertionError('Must be under root.')}
     `('processFile not processed $file', async ({ file, root, ext, expected }) => {
@@ -92,7 +90,6 @@ describe('processFile', () => {
 
     test.each`
         file                                    | root                         | ext       | expected
-        ${'sample/lib/database/fetch.d.ts'}     | ${'sample/lib/database'}     | ${'.mjs'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
         ${'sample/lib-cjs/database/fetch.d.ts'} | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
         ${'sample/lib-cjs/database/fetch.js'}   | ${'sample/lib-cjs/database'} | ${'.cjs'} | ${new UsageError('Import of a file outside of the root. Require: (../constants.js) Source: (fetch.js)')}
     `('processFile error $file', async ({ file, root, ext, expected }) => {
@@ -107,11 +104,10 @@ describe('processFile', () => {
         file                           | root        | target    | ext       | expected
         ${'sample/lib/index.js'}       | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.mjs'}
         ${'sample/lib/index.js.map'}   | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.mjs.map'}
-        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/index.d.mts.map'}
         ${'sample/lib/style.css'}      | ${'sample'} | ${'temp'} | ${'.mjs'} | ${'temp/lib/style.css'}
         ${'sample/lib/index.js'}       | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.cjs'}
         ${'sample/lib/index.js.map'}   | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.cjs.map'}
-        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.d.cts.map'}
+        ${'sample/lib/index.d.ts.map'} | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/index.d.ts.map'}
         ${'sample/lib/style.css'}      | ${'sample'} | ${'temp'} | ${'.cjs'} | ${'temp/lib/style.css'}
     `('calcNewFilename $file', ({ file, root, target, ext, expected }) => {
         expect(__testing__.calcNewFilename(ff(file), ff(root), ff(target), ext)).toEqual(ff(expected));
@@ -136,7 +132,7 @@ describe('processFile', () => {
     test.each`
         filename       | ext       | expected
         ${'code.ts'}   | ${'.mjs'} | ${false}
-        ${'code.d.ts'} | ${'.mjs'} | ${true}
+        ${'code.d.ts'} | ${'.mjs'} | ${false}
         ${'code.js'}   | ${'.mjs'} | ${true}
         ${'code.mjs'}  | ${'.mjs'} | ${true}
         ${'code.cjs'}  | ${'.mjs'} | ${false}

@@ -8,8 +8,8 @@ import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
 import { UsageError } from './errors.js';
 
-const isSupportedFileMJS = /\.(m?js|d\.m?ts)$/;
-const isSupportedFileCJS = /\.(c?js|d\.c?ts)$/;
+const isSupportedFileMJS = /\.(m?js|d\.mts)$/;
+const isSupportedFileCJS = /\.(c?js|d\.ts|d\.cts)$/;
 
 const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
 const regExpRequire = /require\(('|")(?<file>\..*?)\1\);/g;
@@ -39,7 +39,7 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
     if (options.ext === '.cjs') {
         assert(isSupportedFileCJS.test(srcFilename), 'Must be a supported file type (.js, .cjs, .d.ts, .d.cts).');
     } else {
-        assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
+        assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.mts).');
     }
 
     const filename = calcNewFilename(srcFilename, srcRoot, targetRoot, ext);
@@ -172,8 +172,8 @@ export async function processFile(filename: string, options: ProcessFileOptions)
 function calcNewFilename(srcFilename: string, root: string, target: string, ext: ExtensionType): string {
     const newName =
         ext === '.mjs'
-            ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1')
-            : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.ts(.map)?$/, '.cts$1');
+            ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1')
+            : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.d\.ts(.map)?$/, '.d.ts$1');
     return rebaseFile(newName, root, target);
 }
 
