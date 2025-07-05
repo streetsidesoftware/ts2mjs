@@ -179,10 +179,7 @@ function calcNewFilename(srcFilename: string, root: string, target: string, ext:
     const newName =
         ext === '.mjs'
             ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1')
-            : srcFilename
-                  .replace(/\.js(\.map)?$/, '.cjs$1')
-                  .replace(/\.d\.ts(.map)?$/, '.d.cts$1')
-                  .replace(/\.ts(.map)?$/, '.cts$1');
+            : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.ts(.map)?$/, '.cts$1');
     return rebaseFile(newName, root, target);
 }
 
