@@ -11,8 +11,8 @@ import { UsageError } from './errors.js';
 const isSupportedFileMJS = /\.(m?js|m?ts|d\.m?ts)$/;
 const isSupportedFileCJS = /\.(c?js|c?ts|d\.c?ts)$/;
 
-const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
-const regExpRequire = /require\(('|")(?<file>\..*?)\1\)/g;
+const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/dg;
+const regExpRequire = /require\(('|")(?<file>\..*?)\1\)/dg;
 
 type ExtensionType = '.cjs' | '.mjs';
 
@@ -86,12 +86,14 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
     const content = magicString.toString();
 
     // Use replace with a callback to handle all matches at once
-    const processedContent = content.replace(new RegExp(regExpImportExport, 'g'), (match, ...args) => {
+    const processedContent = content.replaceAll(new RegExp(regExpImportExport), (match, ...args) => {
         // Extract groups from the match - the groups are at the end of args array
         const groups = args[args.length - 1];
         const reference = groups?.['file'];
+        const pos = match.indices?.groups?.['file'];
 
-        if (reference && isRelativePath(reference)) {
+        if (reference && pos && isRelativePath(reference)) {
+            const [start, end] = pos;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
                     srcRoot,
@@ -104,16 +106,13 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
                 }
             }
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
+            magicString.update(start, end, newRef);
             linesChanged += 1;
             return match.replace(reference, newRef);
         }
         return match;
     });
 
-    // Apply all changes at once
-    if (linesChanged > 0) {
-        magicString.update(0, content.length, processedContent);
-    }
 
     return linesChanged;
 }
@@ -162,7 +161,7 @@ export function isSupportedFileType(filename: string, ext: ExtensionType, skipTs
     const baseSupported = (ext === '.mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
 
     // If skipTs is enabled, exclude ALL .ts files (including .d.ts files)
-    if (skipTs && /\.ts$/.test(filename)) {
+    if (skipTs && /\.[cm]?ts$/.test(filename)) {
         return false;
     }
 
