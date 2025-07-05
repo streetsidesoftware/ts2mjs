@@ -8,11 +8,11 @@ import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
 import { UsageError } from './errors.js';
 
-const isSupportedFileMJS = /\.(m?js|d\.m?ts)$/;
-const isSupportedFileCJS = /\.(c?js|d\.c?ts)$/;
+const isSupportedFileMJS = /\.(m?js|m?ts|d\.m?ts)$/;
+const isSupportedFileCJS = /\.(c?js|c?ts|d\.c?ts)$/;
 
-const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/g;
-const regExpRequire = /require\(('|")(?<file>\..*?)\1\);/g;
+const regExpImportExport = /(import|export).*? from ('|")(?<file>\..*?)\2;/dg;
+const regExpRequire = /require\(('|")(?<file>\..*?)\1\)/dg;
 
 type ExtensionType = '.cjs' | '.mjs';
 
@@ -37,9 +37,15 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
     if (options.ext === '.cjs') {
-        assert(isSupportedFileCJS.test(srcFilename), 'Must be a supported file type (.js, .cjs, .d.ts, .d.cts).');
+        assert(
+            isSupportedFileCJS.test(srcFilename),
+            'Must be a supported file type (.js, .cjs, .ts, .cts, .d.ts, .d.cts).',
+        );
     } else {
-        assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .d.ts, .d.mts).');
+        assert(
+            isSupportedFileMJS.test(srcFilename),
+            'Must be a supported file type (.js, .mjs, .ts, .mts, .d.ts, .d.mts).',
+        );
     }
 
     const filename = calcNewFilename(srcFilename, srcRoot, targetRoot, ext);
@@ -75,21 +81,17 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
 function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
     const { srcFilename } = src;
     const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
-    const content = magicString.toString();
-
-    const exp = new RegExp(regExpImportExport);
 
     let linesChanged = 0;
-    let match: RegExpExecArray | null;
-    while ((match = exp.exec(content))) {
-        const { index } = match;
+    const content = magicString.toString();
 
-        const line = match[0];
-        const reference = match.groups?.['file'];
+    for (const match of content.matchAll(new RegExp(regExpImportExport))) {
+        const groups = match.groups;
+        const reference = groups?.['file'];
+        const pos = match.indices?.groups?.['file'];
 
-        if (reference && isRelativePath(reference)) {
-            const start = index + line.lastIndexOf(reference);
-            const end = start + reference.length;
+        if (reference && pos && isRelativePath(reference)) {
+            const [start, end] = pos;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Import: (${reference}) Source: (${relative(
                     srcRoot,
@@ -104,30 +106,26 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
             magicString.update(start, end, newRef);
             linesChanged += 1;
-            continue;
         }
     }
+
     return linesChanged;
 }
 
 function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, magicString: MagicString) {
     const { srcFilename } = src;
     const { root: srcRoot, target: targetRoot, allowJsOutsideOfRoot, ext } = options;
-    const content = magicString.toString();
-
-    const exp = new RegExp(regExpRequire);
 
     let linesChanged = 0;
-    let match: RegExpExecArray | null;
-    while ((match = exp.exec(content))) {
-        const { index } = match;
+    const content = magicString.toString();
 
-        const line = match[0];
-        const reference = match.groups?.['file'];
+    for (const match of content.matchAll(new RegExp(regExpRequire))) {
+        const groups = match.groups;
+        const reference = groups?.['file'];
+        const pos = match.indices?.groups?.['file'];
 
-        if (reference && isRelativePath(reference)) {
-            const start = index + line.lastIndexOf(reference);
-            const end = start + reference.length;
+        if (reference && pos && isRelativePath(reference)) {
+            const [start, end] = pos;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Require: (${reference}) Source: (${relative(
                     srcRoot,
@@ -142,14 +140,21 @@ function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, m
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
             magicString.update(start, end, newRef);
             linesChanged += 1;
-            continue;
         }
     }
+
     return linesChanged;
 }
 
-export function isSupportedFileType(filename: string, ext: ExtensionType): boolean {
-    return (ext === '.mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
+export function isSupportedFileType(filename: string, ext: ExtensionType, skipTs = false): boolean {
+    const baseSupported = (ext === '.mjs' ? isSupportedFileMJS : isSupportedFileCJS).test(filename);
+
+    // If skipTs is enabled, exclude ALL .ts files (including .d.ts files)
+    if (skipTs && /\.[cm]?ts$/.test(filename)) {
+        return false;
+    }
+
+    return baseSupported;
 }
 
 export interface ProcessFileOptions {
@@ -158,6 +163,7 @@ export interface ProcessFileOptions {
     ext: ExtensionType;
     allowJsOutsideOfRoot?: boolean;
     warning: (msg: string) => void;
+    skipTs?: boolean;
 }
 
 export async function processFile(filename: string, options: ProcessFileOptions): Promise<ProcessFileResult[]> {

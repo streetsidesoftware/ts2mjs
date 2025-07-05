@@ -291,13 +291,13 @@ exports[`app > run (actual) [ '.', '--root=fixtures/sample', …(1) ] 1`] = `
 [log]: fixtures/sample/out/types.mjs -> temp/out/types.mjs Generated
 [log]: fixtures/sample/out/types.mjs.map - copy
 [log]: fixtures/sample/out/types.mjs.map -> temp/out/types.mjs.map Generated
-[log]: fixtures/sample/src/app.ts - copy
-[log]: fixtures/sample/src/constants.ts - copy
-[log]: fixtures/sample/src/database/fetch.ts - copy
-[log]: fixtures/sample/src/database/index.ts - copy
-[log]: fixtures/sample/src/index.ts - copy
-[log]: fixtures/sample/src/lookup.ts - copy
-[log]: fixtures/sample/src/types.ts - copy
+[log]: fixtures/sample/src/app.ts -> temp/src/app.mts Generated
+[log]: fixtures/sample/src/constants.ts -> temp/src/constants.mts Generated
+[log]: fixtures/sample/src/database/fetch.ts -> temp/src/database/fetch.mts Generated
+[log]: fixtures/sample/src/database/index.ts -> temp/src/database/index.mts Generated
+[log]: fixtures/sample/src/index.ts -> temp/src/index.mts Generated
+[log]: fixtures/sample/src/lookup.ts -> temp/src/lookup.mts Generated
+[log]: fixtures/sample/src/types.ts -> temp/src/types.mts Generated
 [log]: fixtures/sample/tsconfig.cjs.json - copy
 [log]: fixtures/sample/tsconfig.json - copy
 [warn]: 
@@ -337,6 +337,9 @@ exports[`app > run error '--help' 1`] = `
 [stdout]:   --root <dir>          The root directory.
 [stdout]:   -x,--exclude <glob>   Exclude a glob from the files. (default: [])
 [stdout]:   --dry-run             Dry Run do not update files.
+[stdout]:   --remove-source       Remove the original files after successful conversion.
+[stdout]:   --skip-ts             Skip all TypeScript files (.ts and .d.ts) instead of
+[stdout]:                         converting them.
 [stdout]:   --no-must-find-files  No error if files are not found.
 [stdout]:   --no-enforce-root     Do not fail if relative \`.js\` files outside of the root
 [stdout]:                         are imported.

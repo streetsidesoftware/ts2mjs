@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { promises as fs } from 'fs';
 import * as path from 'path';
 
 import { copyFile as cpFile, doesContain, mkdir, rebaseFile, writeFile as writeFileP } from './fileUtils.js';
@@ -46,6 +47,16 @@ export interface Options {
      * Rename files to `.cjs` instead of `.mjs`.
      */
     cjs: boolean | undefined;
+    /**
+     * Remove the original files after successful conversion.
+     * @default false
+     */
+    removeSource: boolean | undefined;
+    /**
+     * Skip all TypeScript files (.ts and .d.ts) instead of converting them.
+     * @default false
+     */
+    skipTs: boolean | undefined;
 }
 
 export interface ProcessFilesResult {
@@ -63,6 +74,8 @@ export async function processFiles(files: string[], options: Options): Promise<P
         allowJsOutsideOfRoot = false,
         warning = console.warn,
         cjs = false,
+        removeSource = false,
+        skipTs = false,
     } = options;
 
     const ext = cjs ? '.cjs' : '.mjs';
@@ -124,12 +137,23 @@ export async function processFiles(files: string[], options: Options): Promise<P
             ext,
             allowJsOutsideOfRoot,
             warning,
+            skipTs,
         });
         for (const fileToWrite of filesToWrite) {
             const { filename, oldFilename, content } = fileToWrite;
             logProgress(`${relName(oldFilename)} -> ${relName(filename)} ${chalk.green('Generated')}`);
             await mkFileDir(filename);
-            writeFile(filename, content);
+            await writeFile(filename, content);
+        }
+
+        // Remove source file if conversion was successful and removeSource is enabled
+        if (removeSource && !dryRun && filesToWrite.length > 0) {
+            try {
+                await fs.unlink(src);
+                logProgress(`${relName(src)} - ${chalk.red('removed')}`);
+            } catch (error) {
+                warning?.(`Failed to remove source file ${relName(src)}: ${error}`);
+            }
         }
     }
 
@@ -139,7 +163,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (!isSupportedFileType(filename, ext)) continue;
+        if (!isSupportedFileType(filename, ext, skipTs)) continue;
         pending.push(handleFile(filename));
     }
 
@@ -147,7 +171,7 @@ export async function processFiles(files: string[], options: Options): Promise<P
     for (const file of files) {
         const filename = path.resolve(cwd, file);
         if (!doesContain(fromDir, file)) continue;
-        if (isSupportedFileType(filename, ext)) continue;
+        if (isSupportedFileType(filename, ext, skipTs)) continue;
         pending.push(copyFile(filename));
     }
 

@@ -1,5 +1,6 @@
 import { Command, CommanderError } from 'commander';
-import { relative } from 'path';
+import { promises as fs } from 'fs';
+import { relative, join } from 'path';
 import { format } from 'util';
 import { afterEach, describe, expect, type Mock, test, vi } from 'vitest';
 
@@ -49,9 +50,9 @@ describe('app', () => {
     });
 
     test.each`
-        args                                                                 | expected
-        ${['.', '--root=fixtures/sample/lib/database']}                      | ${sc('[error]: Error: Import of a file outside of the root.')}
-        ${['.', '--root=fixtures/sample/lib/database', '--no-enforce-root']} | ${sc('[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
+        args                                                                          | expected
+        ${['.', '--root=fixtures/sample/lib/database', '--cjs']}                      | ${sc('[error]: Error: Import of a file outside of the root.')}
+        ${['.', '--root=fixtures/sample/lib/database', '--cjs', '--no-enforce-root']} | ${sc('[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
     `('run (actual) (errors and warnings) $args', async ({ args, expected }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
         const argv = genArgv([...args, `--output=${tempDir}`], { dryRun: false });
@@ -59,6 +60,43 @@ describe('app', () => {
         await expect(run(argv, context)).resolves.toBeUndefined();
         const output = context.output({ sort: true, replacements: [tempDir, 'temp'] });
         expect(output).toEqual(expected);
+    });
+
+    test('run (actual) --remove-source', async () => {
+        // Create temporary test files that can be safely deleted
+        const tempSourceDir = resolveTempUnique();
+        const tempOutputDir = resolveTempUnique();
+
+        // Create test source files
+        await fs.mkdir(tempSourceDir, { recursive: true });
+        await fs.writeFile(join(tempSourceDir, 'test.js'), 'export const test = "hello";');
+        await fs.writeFile(join(tempSourceDir, 'main.js'), 'import { test } from "./test.js";');
+
+        // Run conversion with --remove-source
+        const argv = genArgv(['.', `--root=${tempSourceDir}`, `--output=${tempOutputDir}`, '--remove-source'], {
+            dryRun: false,
+        });
+        const context = createRunContext();
+        await expect(run(argv, context)).resolves.toBeUndefined();
+
+        const output = context.output({ sort: true });
+
+        // Verify outputs
+        expect(output).toEqual(sc('Generated'));
+        expect(output).toEqual(sc('removed'));
+        expect(output).toEqual(sc('done.'));
+
+        // Verify original files were removed
+        await expect(fs.access(join(tempSourceDir, 'test.js'))).rejects.toThrow();
+        await expect(fs.access(join(tempSourceDir, 'main.js'))).rejects.toThrow();
+
+        // Verify new files were created
+        await expect(fs.access(join(tempOutputDir, 'test.mjs'))).resolves.toBeUndefined();
+        await expect(fs.access(join(tempOutputDir, 'main.mjs'))).resolves.toBeUndefined();
+
+        // Verify imports were updated
+        const mainContent = await fs.readFile(join(tempOutputDir, 'main.mjs'), 'utf8');
+        expect(mainContent).toEqual(sc('./test.mjs'));
     });
 
     test.each`

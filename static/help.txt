@@ -1,15 +1,20 @@
 Usage: ts2mjs [options] <files...>
 
-Rename ESM .js files to .mjs
+Rename ESM .js files to .mjs (or .cjs if --cjs options is used)
 
 Arguments:
-  files                 The files to rename.
+  files                 Globs matching files to rename.
 
 Options:
+  --cjs                 Use .cjs extension instead of .mjs extension.
   -o, --output <dir>    The output directory.
   --cwd <dir>           The current working directory.
   --root <dir>          The root directory.
+  -x,--exclude <glob>   Exclude a glob from the files. (default: [])
   --dry-run             Dry Run do not update files.
+  --remove-source       Remove the original files after successful conversion.
+  --skip-ts             Skip all TypeScript files (.ts and .d.ts) instead of
+                        converting them.
   --no-must-find-files  No error if files are not found.
   --no-enforce-root     Do not fail if relative `.js` files outside of the root
                         are imported.
