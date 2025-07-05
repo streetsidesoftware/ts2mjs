@@ -37,9 +37,15 @@ export function processSourceFile(src: SourceFile, options: ProcessFileOptions):
 
     assert(doesContain(srcRoot, srcFilename), 'Must be under root.');
     if (options.ext === '.cjs') {
-        assert(isSupportedFileCJS.test(srcFilename), 'Must be a supported file type (.js, .cjs, .ts, .cts, .d.ts, .d.cts).');
+        assert(
+            isSupportedFileCJS.test(srcFilename),
+            'Must be a supported file type (.js, .cjs, .ts, .cts, .d.ts, .d.cts).',
+        );
     } else {
-        assert(isSupportedFileMJS.test(srcFilename), 'Must be a supported file type (.js, .mjs, .ts, .mts, .d.ts, .d.mts).');
+        assert(
+            isSupportedFileMJS.test(srcFilename),
+            'Must be a supported file type (.js, .mjs, .ts, .mts, .d.ts, .d.mts).',
+        );
     }
 
     const filename = calcNewFilename(srcFilename, srcRoot, targetRoot, ext);
@@ -185,7 +191,10 @@ function calcNewFilename(srcFilename: string, root: string, target: string, ext:
     const newName =
         ext === '.mjs'
             ? srcFilename.replace(/\.js(\.map)?$/, '.mjs$1').replace(/\.ts(.map)?$/, '.mts$1')
-            : srcFilename.replace(/\.js(\.map)?$/, '.cjs$1').replace(/\.d\.ts(.map)?$/, '.d.cts$1').replace(/\.ts(.map)?$/, '.cts$1');
+            : srcFilename
+                  .replace(/\.js(\.map)?$/, '.cjs$1')
+                  .replace(/\.d\.ts(.map)?$/, '.d.cts$1')
+                  .replace(/\.ts(.map)?$/, '.cts$1');
     return rebaseFile(newName, root, target);
 }
 

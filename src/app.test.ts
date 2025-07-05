@@ -50,8 +50,8 @@ describe('app', () => {
     });
 
     test.each`
-        args                                                                        | expected
-        ${['.', '--root=fixtures/sample/lib/database', '--cjs']}                   | ${sc('[error]: Error: Import of a file outside of the root.')}
+        args                                                                          | expected
+        ${['.', '--root=fixtures/sample/lib/database', '--cjs']}                      | ${sc('[error]: Error: Import of a file outside of the root.')}
         ${['.', '--root=fixtures/sample/lib/database', '--cjs', '--no-enforce-root']} | ${sc('[error]: Warning: Import of a file outside of the root. Import: (../types.js) Source: (fetch.d.ts)')}
     `('run (actual) (errors and warnings) $args', async ({ args, expected }) => {
         const tempDir = relative(process.cwd(), resolveTempUnique());
@@ -73,7 +73,9 @@ describe('app', () => {
         await fs.writeFile(join(tempSourceDir, 'main.js'), 'import { test } from "./test.js";');
 
         // Run conversion with --remove-source
-        const argv = genArgv(['.', `--root=${tempSourceDir}`, `--output=${tempOutputDir}`, '--remove-source'], { dryRun: false });
+        const argv = genArgv(['.', `--root=${tempSourceDir}`, `--output=${tempOutputDir}`, '--remove-source'], {
+            dryRun: false,
+        });
         const context = createRunContext();
         await expect(run(argv, context)).resolves.toBeUndefined();
 

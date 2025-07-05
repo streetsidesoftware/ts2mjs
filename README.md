@@ -23,6 +23,7 @@ Use the `--cjs` flag to generate CommonJS extensions instead:
 ## Key Features
 
 ### 🔄 **Import/Export Rewriting**
+
 Automatically updates relative imports and exports in your files:
 
 **`dist/code.js` -> `dist/code.mjs`**
@@ -44,6 +45,7 @@ import { lib } from 'package/lib/index.js'
 ```
 
 ### 🗑️ **Source File Removal**
+
 Use `--remove-source` to automatically delete original files after successful conversion:
 
 ```sh
@@ -52,6 +54,7 @@ ts2mjs dist/esm --remove-source
 ```
 
 ### 🚫 **TypeScript File Skipping**
+
 Use `--skip-ts` to ignore TypeScript files instead of converting them:
 
 ```sh

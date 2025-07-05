@@ -154,27 +154,27 @@ describe('processFile', () => {
     );
 
     test.each`
-        filename       | ext       | skipTs    | expected
-        ${'code.ts'}   | ${'.mjs'} | ${false}  | ${true}
-        ${'code.ts'}   | ${'.mjs'} | ${true}   | ${false}
-        ${'code.d.ts'} | ${'.mjs'} | ${false}  | ${true}
-        ${'code.d.ts'} | ${'.mjs'} | ${true}   | ${false}
-        ${'code.js'}   | ${'.mjs'} | ${false}  | ${true}
-        ${'code.js'}   | ${'.mjs'} | ${true}   | ${true}
-        ${'code.mjs'}  | ${'.mjs'} | ${false}  | ${true}
-        ${'code.mjs'}  | ${'.mjs'} | ${true}   | ${true}
-        ${'code.cjs'}  | ${'.mjs'} | ${false}  | ${false}
-        ${'code.cjs'}  | ${'.mjs'} | ${true}   | ${false}
-        ${'code.ts'}   | ${'.cjs'} | ${false}  | ${true}
-        ${'code.ts'}   | ${'.cjs'} | ${true}   | ${false}
-        ${'code.d.ts'} | ${'.cjs'} | ${false}  | ${true}
-        ${'code.d.ts'} | ${'.cjs'} | ${true}   | ${false}
-        ${'code.js'}   | ${'.cjs'} | ${false}  | ${true}
-        ${'code.js'}   | ${'.cjs'} | ${true}   | ${true}
-        ${'code.mjs'}  | ${'.cjs'} | ${false}  | ${false}
-        ${'code.mjs'}  | ${'.cjs'} | ${true}   | ${false}
-        ${'code.cjs'}  | ${'.cjs'} | ${false}  | ${true}
-        ${'code.cjs'}  | ${'.cjs'} | ${true}   | ${true}
+        filename       | ext       | skipTs   | expected
+        ${'code.ts'}   | ${'.mjs'} | ${false} | ${true}
+        ${'code.ts'}   | ${'.mjs'} | ${true}  | ${false}
+        ${'code.d.ts'} | ${'.mjs'} | ${false} | ${true}
+        ${'code.d.ts'} | ${'.mjs'} | ${true}  | ${false}
+        ${'code.js'}   | ${'.mjs'} | ${false} | ${true}
+        ${'code.js'}   | ${'.mjs'} | ${true}  | ${true}
+        ${'code.mjs'}  | ${'.mjs'} | ${false} | ${true}
+        ${'code.mjs'}  | ${'.mjs'} | ${true}  | ${true}
+        ${'code.cjs'}  | ${'.mjs'} | ${false} | ${false}
+        ${'code.cjs'}  | ${'.mjs'} | ${true}  | ${false}
+        ${'code.ts'}   | ${'.cjs'} | ${false} | ${true}
+        ${'code.ts'}   | ${'.cjs'} | ${true}  | ${false}
+        ${'code.d.ts'} | ${'.cjs'} | ${false} | ${true}
+        ${'code.d.ts'} | ${'.cjs'} | ${true}  | ${false}
+        ${'code.js'}   | ${'.cjs'} | ${false} | ${true}
+        ${'code.js'}   | ${'.cjs'} | ${true}  | ${true}
+        ${'code.mjs'}  | ${'.cjs'} | ${false} | ${false}
+        ${'code.mjs'}  | ${'.cjs'} | ${true}  | ${false}
+        ${'code.cjs'}  | ${'.cjs'} | ${false} | ${true}
+        ${'code.cjs'}  | ${'.cjs'} | ${true}  | ${true}
     `('isSupportedFileType $filename `$ext` skipTs=$skipTs', ({ filename, ext, skipTs, expected }) => {
         expect(isSupportedFileType(filename, ext, skipTs)).toBe(expected);
     });
@@ -194,7 +194,7 @@ __exportStar(require("./optional-require.js"), exports);
             root: ff('sample/lib'),
             target: ff('temp'),
             ext: '.cjs',
-            warning: vi.fn()
+            warning: vi.fn(),
         });
 
         expect(result).toBeTruthy();
