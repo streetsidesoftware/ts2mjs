@@ -85,10 +85,8 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
     let linesChanged = 0;
     const content = magicString.toString();
 
-    // Use replace with a callback to handle all matches at once
-    const processedContent = content.replaceAll(new RegExp(regExpImportExport), (match, ...args) => {
-        // Extract groups from the match - the groups are at the end of args array
-        const groups = args[args.length - 1];
+    for (const match of content.matchAll(new RegExp(regExpImportExport))) {
+        const groups = match.groups;
         const reference = groups?.['file'];
         const pos = match.indices?.groups?.['file'];
 
@@ -108,11 +106,8 @@ function adjustImportExportStatements(src: SourceFile, options: ProcessFileOptio
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
             magicString.update(start, end, newRef);
             linesChanged += 1;
-            return match.replace(reference, newRef);
         }
-        return match;
-    });
-
+    }
 
     return linesChanged;
 }
@@ -124,13 +119,13 @@ function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, m
     let linesChanged = 0;
     const content = magicString.toString();
 
-    // Use replace with a callback to handle all matches at once
-    const processedContent = content.replace(new RegExp(regExpRequire, 'g'), (match, ...args) => {
-        // Extract groups from the match - the groups are at the end of args array
-        const groups = args[args.length - 1];
+    for (const match of content.matchAll(new RegExp(regExpRequire))) {
+        const groups = match.groups;
         const reference = groups?.['file'];
+        const pos = match.indices?.groups?.['file'];
 
-        if (reference && isRelativePath(reference)) {
+        if (reference && pos && isRelativePath(reference)) {
+            const [start, end] = pos;
             if (!doesContain(srcRoot, pathJoin(dirname(srcFilename), reference))) {
                 const message = `Import of a file outside of the root. Require: (${reference}) Source: (${relative(
                     srcRoot,
@@ -143,15 +138,9 @@ function adjustRequireStatements(src: SourceFile, options: ProcessFileOptions, m
                 }
             }
             const newRef = calcRelativeImportFilename(reference, srcFilename, srcRoot, targetRoot, ext);
+            magicString.update(start, end, newRef);
             linesChanged += 1;
-            return match.replace(reference, newRef);
         }
-        return match;
-    });
-
-    // Apply all changes at once
-    if (linesChanged > 0) {
-        magicString.update(0, content.length, processedContent);
     }
 
     return linesChanged;
