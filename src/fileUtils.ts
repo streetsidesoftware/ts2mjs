@@ -1,5 +1,5 @@
-import { dirname, isAbsolute, relative, resolve } from 'path';
 import { promises as fs } from 'fs';
+import { dirname, isAbsolute, relative, resolve } from 'path';
 
 const regExpIsRelative = /^\.\.?[/\\]/;
 

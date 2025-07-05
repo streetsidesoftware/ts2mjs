@@ -1,9 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "@tsconfig/node18/tsconfig.json",
+    "extends": "@tsconfig/node20/tsconfig.json",
     "compilerOptions": {
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
         "exactOptionalPropertyTypes": true,
         "allowJs": true,
         "outDir": "dist",

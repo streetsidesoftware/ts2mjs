@@ -81,7 +81,7 @@ This is an example on how to create a package that exports both CommonJS and ESM
 ```jsonc
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node18/tsconfig.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
     "module": "ES2022",
@@ -98,7 +98,7 @@ This is an example on how to create a package that exports both CommonJS and ESM
 ```jsonc
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node18/tsconfig.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
     "module": "NodeNext",

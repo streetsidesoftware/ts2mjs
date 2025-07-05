@@ -27,6 +27,7 @@ words:
   - codeql
   - coverallsapp
   - lcov
+  - nodenext
   - pnpm
   - vitest
 ignoreWords: []

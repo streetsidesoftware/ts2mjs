@@ -1,6 +1,7 @@
+import { fileURLToPath, pathToFileURL } from 'url';
+
 import { readFile } from './fileUtils.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
-import { fileURLToPath, pathToFileURL } from 'url';
 
 export const SOURCE_MAP_URL_MARKER = '//' + '# ' + 'sourceMappingURL' + '=';
 
@@ -31,7 +32,7 @@ export function getSourceMapRef(filename: string, content: string): SourceMapRef
     try {
         const url = new URL(srcMapUrl, pathToFileURL(filename));
         return { index: srcMapIdx, url };
-    } catch (e) {
+    } catch {
         return undefined;
     }
 }
@@ -39,7 +40,7 @@ export function getSourceMapRef(filename: string, content: string): SourceMapRef
 export async function readSourceMap(url: URL): Promise<SourceMap | undefined> {
     try {
         return { map: await readFile(fileURLToPath(url)), url };
-    } catch (e) {
+    } catch {
         // do not break if source map file is missing.
         return undefined;
     }

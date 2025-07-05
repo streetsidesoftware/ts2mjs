@@ -4,8 +4,8 @@ import { program as defaultCommand } from 'commander';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { UsageError } from './errors.js';
 
+import { UsageError } from './errors.js';
 import { findFiles } from './findFiles.js';
 import type { Options as ProcessFilesOptions } from './processFiles.js';
 import { processFiles } from './processFiles.js';
