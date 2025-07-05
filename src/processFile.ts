@@ -1,12 +1,13 @@
-import { basename, dirname, join as pathJoin, normalize, relative, sep as pathSep } from 'path';
-
 import assert from 'assert';
+import { basename, dirname, join as pathJoin, normalize, relative, sep as pathSep } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { createMagicString, MagicString } from '../lib/magicString.mjs';
+
+import type { MagicString } from '../lib/magicString.mjs';
+import { createMagicString } from '../lib/magicString.mjs';
+import { UsageError } from './errors.js';
 import { doesContain, isRelativePath, rebaseFile } from './fileUtils.js';
 import { readSourceFile, SOURCE_MAP_URL_MARKER } from './readSourceFile.js';
 import type { SourceFile, SourceMap } from './SourceFile.js';
-import { UsageError } from './errors.js';
 
 const isSupportedFileMJS = /\.(m?js|m?ts|d\.m?ts)$/;
 const isSupportedFileCJS = /\.(c?js|c?ts|d\.c?ts)$/;

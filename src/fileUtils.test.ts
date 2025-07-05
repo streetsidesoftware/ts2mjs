@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
 import * as path from 'path';
+import { describe, expect, test } from 'vitest';
 
 import { rebaseFile } from './fileUtils.js';
 

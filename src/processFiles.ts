@@ -95,7 +95,8 @@ export async function processFiles(files: string[], options: Options): Promise<P
     }
 
     async function mkFileDir(filename: string) {
-        !dryRun && (await mkdir(path.dirname(filename)));
+        if (dryRun) return;
+        await mkdir(path.dirname(filename));
     }
 
     async function cp(src: string, dst: string) {

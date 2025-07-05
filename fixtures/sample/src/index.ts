@@ -1,16 +1,14 @@
+export { fetchEntity } from './database/index.js';
+export { lookUpPerson } from './lookup.js';
 export {
+    Address,
+    AddressGuid,
+    Annotation,
+    GUID,
+    Person,
+    PersonGuid,
+    PhoneNumber,
+    PhoneNumberGuid,
     PrimeNumber,
     Tuple,
-    GUID,
-    AddressGuid,
-    Address,
-    PhoneNumberGuid,
-    PhoneNumber,
-    PersonGuid,
-    Person,
-    Annotation,
 } from './types.js';
-
-export { lookUpPerson } from './lookup.js';
-
-export { fetchEntity } from './database/index.js';

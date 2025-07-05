@@ -1,10 +1,10 @@
+import { AssertionError } from 'assert';
 import { describe, expect, test, vi } from 'vitest';
-import { UsageError } from './errors.js';
 
-import { processSourceFile, __testing__, isSupportedFileType } from './processFile.js';
+import { UsageError } from './errors.js';
+import { __testing__, isSupportedFileType, processSourceFile } from './processFile.js';
 import { readSourceFile } from './readSourceFile.js';
 import { resolveFixture, resolverTemp } from './test.util.js';
-import { AssertionError } from 'assert';
 
 const ff = resolveFixture;
 
@@ -200,15 +200,15 @@ __exportStar(require("./optional-require.js"), exports);
         expect(result).toBeTruthy();
 
         // Check that ALL occurrences are replaced, not just the first one
-        const jsOccurrences = (result!.content.match(/optional-require\.js/g) || []).length;
-        const cjsOccurrences = (result!.content.match(/optional-require\.cjs/g) || []).length;
+        const jsOccurrences = (result?.content.match(/optional-require\.js/g) || []).length;
+        const cjsOccurrences = (result?.content.match(/optional-require\.cjs/g) || []).length;
 
         expect(jsOccurrences).toBe(0); // No .js should remain
         expect(cjsOccurrences).toBe(2); // Both should be converted to .cjs
 
         // Verify the actual content contains the expected conversions
-        expect(result!.content).toContain('require("./optional-require.cjs")');
-        expect(result!.content).not.toContain('require("./optional-require.js")');
+        expect(result?.content).toContain('require("./optional-require.cjs")');
+        expect(result?.content).not.toContain('require("./optional-require.js")');
     });
 
     test.each`

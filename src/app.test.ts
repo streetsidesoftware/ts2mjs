@@ -1,6 +1,6 @@
 import { Command, CommanderError } from 'commander';
 import { promises as fs } from 'fs';
-import { relative, join } from 'path';
+import { join, relative } from 'path';
 import { format } from 'util';
 import { afterEach, describe, expect, type Mock, test, vi } from 'vitest';
 
@@ -114,9 +114,9 @@ describe('app', () => {
 function genArgv(args: string | string[], { dryRun = true, color = false, verbose = true } = {}): string[] {
     args = typeof args === 'string' ? [args] : args;
     const defaultArgs: string[] = [];
-    dryRun && defaultArgs.push('--dry-run');
+    if (dryRun) defaultArgs.push('--dry-run');
     defaultArgs.push(color ? '--color' : '--no-color');
-    verbose && defaultArgs.push('--verbose');
+    if (verbose) defaultArgs.push('--verbose');
     const argv: string[] = [process.argv[0], 'bin.mjs', ...defaultArgs, ...args];
     return argv;
 }
