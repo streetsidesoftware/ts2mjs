@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.0.0](https://github.com/streetsidesoftware/ts2mjs/compare/v3.0.0...v4.0.0) (2025-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Update to Node 20 ([#347](https://github.com/streetsidesoftware/ts2mjs/issues/347))
+
+### Features
+
+* add --remove-source and --skip-ts options, fix duplicate import bug ([#345](https://github.com/streetsidesoftware/ts2mjs/issues/345)) ([a8c87d8](https://github.com/streetsidesoftware/ts2mjs/commit/a8c87d8c00b72381efe82824ca017860876222a7))
+* Update to Node 20 ([#347](https://github.com/streetsidesoftware/ts2mjs/issues/347)) ([526ae41](https://github.com/streetsidesoftware/ts2mjs/commit/526ae41a60af9efde9832b34b892720953a10609))
+
 ## [3.0.0](https://github.com/streetsidesoftware/ts2mjs/compare/v2.1.1...v3.0.0) (2024-03-03)
 
 

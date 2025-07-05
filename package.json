@@ -1,6 +1,6 @@
 {
   "name": "ts2mjs",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Rename TypeScript Created ESM .js files to .mjs",
   "bin": {
     "ts2mjs": "bin.mjs"
